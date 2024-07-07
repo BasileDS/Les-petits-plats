@@ -3,9 +3,9 @@
   <head>
       <meta charset="utf-8">
       <link rel="icon" type="image/png" href="./assets/favicon.png">
-      <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
-      <title>Les Petits Plats</title>
+      <link href="https://fonts.googleapis.com/css?family=Anton|Manrope&display=swap" rel="stylesheet">
       <link href="./css/style.css" rel="stylesheet" type="text/css" />
+      <title>Les Petits Plats</title>
   </head>
   <body>
     <header class="main-header">
@@ -23,24 +23,17 @@
     </header>
     <main>
       <nav class="filters-nav">
-          <div class="filters-container">
-            <div class="filters">
-              <div class="filter filter-ingredients">
-                <p>ingrédients</p>
-              </div>
-              <div class="filter filter-tools">
-                <p>Appareils</p>
-              </div>
-              <div class="filter filter-ustensils">
-                <p>Ustensils</p>
-              </div>
-            </div>
-            <p class="recipes-number">1500 recettes</p>
+        <div class="filters-container">
+          <div class="filter-elements">
           </div>
-          <div class="active-filters">
-          </div>
+          <p class="recipes-number">1500 recettes</p>
+        </div>
+        <div class="active-filters">
+          <script src="./scripts/templates/filter.js"></script>
+        </div>
       </nav>
       <div class="recipes-cards-wrapper">
+        <script src="./scripts/templates/recipesCard.js"></script>
       </div>
     </main>
     <script src="./scripts/index.js"></script>

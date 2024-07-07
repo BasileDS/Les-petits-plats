@@ -1,5 +1,5 @@
 * {
-    font-family: "Anton";
+    font-family: "Manrope";
 }
 
 body {
@@ -13,6 +13,12 @@ main {
     gap: 30px;
     padding: 20px 5%;
 }
+
+h1, h2, h3, h4, h5, h6, .main-nav-title {
+    font-family: "Anton";
+    font-weight: 400;
+}
+
 /* Main header styles */
 .main-header {
     height: 700px;
@@ -41,18 +47,16 @@ main {
 
 .main-nav-title {
     font-family: "Anton";
-    font-size: 27px;
-    font-weight: 400;
     text-transform: uppercase;
+    font-size: 27px;
     color: white;
 }
 
 .header-search-title {
     color: #FFD15B;
-    font-size: 44px;
-    font-weight: 400;
-    text-align: center;
     text-transform: uppercase;
+    font-size: 44px;
+    text-align: center;
     max-width: 700px;
 }
 
@@ -91,7 +95,7 @@ main {
     align-items: center;
 }
 
-.filters {
+.filter-elements {
     display: flex;
     gap: 50px;
 }
@@ -107,5 +111,48 @@ main {
 }
 
 .recipes-number {
+    font-family: "Anton";
     font-size: 20px;
+    font-weight: 400;
+}
+
+/* Recipes cards styles */
+.recipes-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+}
+
+.recipe-card {
+    background-color: white;
+    border-radius: 21px;
+    overflow: hidden;
+}
+
+.recipe-header {
+    display: flex;
+    justify-content: end;
+}
+
+.recipe-duration {
+    position: absolute;
+    padding: 5px 15px;
+    margin-right: 20px;
+    border-radius: 20px;
+    background-color: #FFD15B;
+}
+
+.recipe-image {
+    width: 100%;
+}
+
+.recipe-content {
+    padding: 0px 30px 60px 30px;
+}
+
+.card-category {
+    text-transform: uppercase;
+    color: #7A7A7A;
+    font-size: 12px;
+    font-weight: 700;
 }
