@@ -11,9 +11,7 @@ async function init() {
     
     displayFilters();
     
-    displayRecipesCards();
-    displayRecipesCards();
-    displayRecipesCards();
+    displayRecipesCards(recipes);
 }
 
 init();

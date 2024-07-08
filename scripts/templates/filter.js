@@ -11,7 +11,6 @@ function displayFilters() {
         
         const filterName = document.createElement("p");
         filterName.textContent = filter;
-        console.log(filter);
         filterElement.appendChild(filterName);
 
         filtersContainer.appendChild(filterElement);
