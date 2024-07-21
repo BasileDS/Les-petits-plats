@@ -1,11 +1,13 @@
 // Init filters elements and listeners on page load
 function initFilterElements(ingredients, appliances, ustensils) {
 
-    activateDropdownFilterDOMElements(ingredients, appliances, ustensils);
+    const filters = activateDropdownFilterDOMElements(ingredients, appliances, ustensils);
     
     initSearchBars();
 
     addFilterDropdownAnimation();
+
+    return filters
 }
 
 // Display filter elements
@@ -55,7 +57,7 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
             ingredients.forEach(ingredient => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element");
+                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
                 dropdownListElement.textContent = ingredient;
     
                 dropdownList.append(dropdownListElement);
@@ -66,7 +68,7 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
             appliances.forEach(appliance => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element");
+                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
                 dropdownListElement.textContent = appliance;
     
                 dropdownList.append(dropdownListElement);
@@ -77,7 +79,7 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
             ustensils.forEach(ustensil => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element");
+                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
                 dropdownListElement.textContent = ustensil;
     
                 dropdownList.append(dropdownListElement);
@@ -90,6 +92,8 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         filterElement.append(filterButton, filterDropDown);
         filtersContainer.appendChild(filterElement);
     });
+
+    return filters
 }
 
 // Init search bar listners

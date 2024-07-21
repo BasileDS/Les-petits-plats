@@ -20,9 +20,9 @@ async function init() {
     const appliances = recipes.getAppliances(data);
     const ustensils = recipes.getUstensils(data);
 
-    filterElements.initFilterElements(ingredients, appliances, ustensils);
+    const filters = filterElements.initFilterElements(ingredients, appliances, ustensils);
 
-    tags.initTags();
+    tags.initTags(filters);
 }
 
 init();
