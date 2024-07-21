@@ -1,18 +1,28 @@
+import * as filterElements from "./templates/filterElements.js";
+import * as recipesCards from "./templates/recipesCard.js";
+import * as recipes from "./utils/recipes.js";
+import * as tags from "./utils/tags.js";
+
 // Get recipes data from JSON files
-let recipes = {};
+let data = {};
 async function getRecipes() {
     const response = await fetch("./data/recipes.json");
-    recipes = await response.json();
+    data = await response.json();
 }
 
 // Run all index.js scripts
 async function init() {
     await getRecipes();
     
-    displayFilters();
-    
-    displayRecipesCards(recipes);
+    recipesCards.displayRecipesCards(data);
+
+    const ingredients = recipes.getIngredients(data);
+    const appliances = recipes.getAppliances(data);
+    const ustensils = recipes.getUstensils(data);
+
+    filterElements.initFilterElements(ingredients, appliances, ustensils);
+
+    tags.initTags();
 }
 
 init();
-

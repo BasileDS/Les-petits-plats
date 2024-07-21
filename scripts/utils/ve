@@ -1,0 +1,23 @@
+
+
+
+
+
+const tagName = listElement.textContent;
+
+if (listElement.lastChild.localName !== "img") {
+    const cancelCross = document.createElement("img");
+    cancelCross.setAttribute("src", "/assets/icons/cross.svg");
+    cancelCross.classList.add("cancel-list-element");
+    
+    listElement.classList.add("active-list-element");        
+    listElement.appendChild(cancelCross);
+
+    updateActiveTags(tagName, "add");
+} else {
+
+    listElement.classList.remove("active-list-element");        
+    listElement.lastChild.remove();
+
+    updateActiveTags(tagName, "remove");
+}

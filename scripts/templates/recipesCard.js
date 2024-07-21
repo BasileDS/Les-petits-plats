@@ -1,7 +1,5 @@
 // Display recipes cards
 function displayRecipesCards(recipes) {
-    console.log(recipes);
-
     recipes.forEach(recipe => {
         
         const article = document.createElement("article");
@@ -39,6 +37,7 @@ function displayRecipesCards(recipes) {
         
         const divIngredients = document.createElement("div");
         divIngredients.classList.add("card-ingredients");
+
         recipe.ingredients.forEach(ingredient => {
             const pIngredient = document.createElement("div");
             pIngredient.classList.add("card-ingredient");
@@ -55,26 +54,17 @@ function displayRecipesCards(recipes) {
                 pIngredientQuantity.textContent = ingredient.quantity;
             }
 
-            pIngredient.appendChild(pIngredientName);
-            pIngredient.appendChild(pIngredientQuantity);
-
+            pIngredient.append(pIngredientName, pIngredientQuantity);
             divIngredients.appendChild(pIngredient);
         });
-        
-        
-        divImage.appendChild(duration);
-        divImage.appendChild(image);
-        
-        divRecipeContent.appendChild(h2);
-        divRecipeContent.appendChild(pRecipeCat);
-        divRecipeContent.appendChild(pDescription);
-        divRecipeContent.appendChild(pIngredientCat);
-        divRecipeContent.appendChild(divIngredients);
-        
-        article.appendChild(divImage);
-        article.appendChild(divRecipeContent);
+
+        divImage.append(duration, image);
+        divRecipeContent.append(h2, pRecipeCat, pDescription, pIngredientCat, divIngredients);
+        article.append(divImage, divRecipeContent);
         
         const recipesContainer = document.querySelector(".recipes-cards-wrapper");
         recipesContainer.appendChild(article);
     });
 }
+
+export { displayRecipesCards };

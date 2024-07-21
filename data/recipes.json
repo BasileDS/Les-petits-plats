@@ -61,7 +61,7 @@
                 "quantity" : 5
             },
             {
-                "ingredient" : "Lait de Coco",
+                "ingredient" : "Lait de coco",
                 "quantity" : 100,
                 "unit" : "ml"
             }
@@ -198,7 +198,7 @@
                 "quantity": 1
             },
             {
-                "ingredient": "Pomme",
+                "ingredient": "Pommes",
                 "quantity": 3
             },
             {
@@ -661,7 +661,7 @@
         "servings": 4,
         "ingredients": [
             {
-                "ingredient": "Kiwi",
+                "ingredient": "Kiwis",
                 "quantity": 4
             },
             {
@@ -1381,7 +1381,7 @@
         "servings": 40,
         "ingredients": [
             {
-                "ingredient": "Pomme",
+                "ingredient": "Pommes",
                 "quantity": 2
             },
             {

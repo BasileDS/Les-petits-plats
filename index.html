@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
       <meta charset="utf-8">
-      <link rel="icon" type="image/png" href="./assets/favicon.png">
+      <script type="module" src="./scripts/index.js"></script>
       <link href="https://fonts.googleapis.com/css?family=Anton|Manrope&display=swap" rel="stylesheet">
       <link href="./css/style.css" rel="stylesheet" type="text/css" />
       <title>Les Petits Plats</title>
@@ -14,10 +14,10 @@
       </div>
       <div class="header-search">
         <h1 class="header-search-title">Cherchez parmi plus de 1500 recettes du quotidien, simples et délicieuses</h1>
-        <div class="header-search-bar">
-          <input class="recipes-search-input" type="text" placeholder="Rechercher une recette, un ingrédient, ...">
-          <p class="clear-input-button">X</p>
-          <p class="search-input-button">O</p>
+        <div class="search-bar header-search-bar ">
+          <input class="recipes-search-input search-input" type="text" placeholder="Rechercher une recette, un ingrédient, ...">
+          <img class="cancel-button cancel-input-button" src="assets/icons/cross.svg">
+          <button class="search-input-button" id="searchButton"><img class="search-button-image" src="assets/icons/search.svg"></button>
         </div>
       </div>
     </header>
@@ -29,14 +29,11 @@
           <p class="recipes-number">1500 recettes</p>
         </div>
         <div class="active-filters">
-          <script src="./scripts/templates/filter.js"></script>
         </div>
       </nav>
       <div class="recipes-cards-wrapper">
-        <script src="./scripts/templates/recipesCard.js"></script>
       </div>
     </main>
-    <script src="./scripts/index.js"></script>
   </body>
 </html>
  
