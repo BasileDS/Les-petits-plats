@@ -75,6 +75,8 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 .header-search-bar {
     width: 900px;
     border-radius: 10px;
+    position: relative;
+    z-index: 1;
 }
 
 .cancel-input-button {
@@ -129,6 +131,66 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 
 .search-button-image:hover {
     filter: brightness(10%);
+}
+
+.search-completion-container {
+    position: absolute;
+    width: 860px;
+    max-height: 150px;
+    overflow-y: scroll;
+    animation: search-completion-open 300ms;
+    border-radius: 10px;
+    margin-top: -15px;
+    padding: 20px;
+    background-color: white;
+    gap: 15px;
+    z-index: 0;
+}
+
+.search-completion-container-close {
+    animation: search-completion-close 300ms;
+}
+
+@keyframes search-completion-open {
+    from {
+        height: fit-content;
+        max-height: 0px;
+        overflow: scroll;
+    }
+  
+    to {
+        max-height: 150px;
+        overflow: hidden;
+    }
+}
+
+@keyframes search-completion-close {
+    from {
+        max-height: 150px;
+        overflow: hidden;
+    }
+  
+    to {
+        height: fit-content;
+        max-height: 0px;
+        overflow: scroll;
+    }
+}
+
+.search-completion-element {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.search-completion-element p {
+    margin: 0;
+}
+
+.search-completion-element-type {
+    width: 75px;
+    font-size: 0.8em;
+    color: gray;
 }
 
 /* Recipes filters styles */
@@ -254,6 +316,7 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 .dropdown-cancel-button {
     width: 12px;
     filter: brightness(200%);
+    cursor: pointer;
 }
 
 .dropdow-list {

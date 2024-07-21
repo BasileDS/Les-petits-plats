@@ -1,59 +1,15 @@
 const activeTags = new Set();
 
 // Init tag activation/desactivation based on user filters choice
-function initTags(filters) {
-    const ingredientsListDOM = getDropdownFiltersElements(filters[0]); // ingredients
-    const appliancesListDOM = getDropdownFiltersElements(filters[1]); // appliances
-    const ustensilsListDOM = getDropdownFiltersElements(filters[2]); // ustensils
+function initTagFiltering() {
+    const filtersDOMElements = getAllFilterDOMElement();
 
-    ingredientsListDOM.forEach(listElement => {
+    filtersDOMElements.forEach(listElement => {
         listElement.addEventListener("click", () => {
             updateActiveTags(listElement);
             updateListElement(listElement);
         });
     });
-
-    appliancesListDOM.forEach(listElement => {
-        listElement.addEventListener("click", () => {
-            updateActiveTags(listElement);
-            updateListElement(listElement);
-        });
-    });
-
-    ustensilsListDOM.forEach(listElement => {
-        listElement.addEventListener("click", () => {
-            updateActiveTags(listElement);
-            updateListElement(listElement);
-        });
-    });
-}
-
-// Get all list elements from a specific dropdown filter
-function getDropdownFiltersElements(filter) {
-
-    function getDropdownFiltersList(filter) {
-        const filterList = [];
-        const dropdowListElements = document.querySelectorAll(`.list-element-${filter}`);
-        dropdowListElements.forEach(listElement => {
-            filterList.push(listElement);
-        });
-    
-        return filterList
-    }
-
-    switch (filter) {
-        case "Ingrédients":
-            return getDropdownFiltersList(filter);
-    
-        case "Appareils":
-            return getDropdownFiltersList(filter);
-    
-        case "Ustensiles":
-            return getDropdownFiltersList(filter);
-    
-        default:
-            break;
-    }
 }
 
 // Set list element to active statu
@@ -73,6 +29,7 @@ function updateListElement(listElement) {
     }
 }
 
+// Remove active filters that are not in the active tags array
 function removeDisabledListFilters() {
     const allDropdownFilters = document.querySelectorAll(".dropdow-list-element");
 
@@ -84,7 +41,6 @@ function removeDisabledListFilters() {
             filter.lastChild.remove();
         }
     });
-
 }
 
 // Update active tags set array
@@ -133,5 +89,4 @@ function displayActiveTags() {
     console.log(activeTags);
 }
 
-
-export { initTags }
+export { initTagFiltering }
