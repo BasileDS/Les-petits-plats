@@ -476,4 +476,4 @@ const hasAccents = function(string) {
 	return !!string.match(firstAccent);
 };
 
-export { removeAccents, hasAccents, removeAccents }
+export { removeAccents, hasAccents }

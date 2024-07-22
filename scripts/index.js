@@ -11,7 +11,6 @@ async function init() {
     const ingredients = await recipesData.getDropdownFiltersList("ingredients");
     const appliances = await recipesData.getDropdownFiltersList("appliances");
     const ustensils = await recipesData.getDropdownFiltersList("ustensils");
-
     const filters = filterElements.initFilterElements(ingredients, appliances, ustensils);
 
     tags.initTagFiltering(filters);

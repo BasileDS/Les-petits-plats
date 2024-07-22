@@ -1,5 +1,3 @@
-import * as recipesData from "/scripts/utils/data.js";
-
 const activeTags = new Set();
 
 // Init tag activation/desactivation based on user filters choice
@@ -10,13 +8,13 @@ function initTagFiltering() {
     filtersDOMElements.forEach(listElement => {
         listElement.addEventListener("click", () => {
             updateActiveTags(listElement);
-            updateListElement();
+            updateListElementTags();
         });
     });
 }
 
 // Set list element to active statu
-function updateListElement() {
+function updateListElementTags() {
     const allDropdownFilters = document.querySelectorAll(".dropdow-list-element");
 
     allDropdownFilters.forEach(filter => {
@@ -35,7 +33,6 @@ function updateListElement() {
         }
     });
 }
-
 
 // Update active tags set array
 function updateActiveTags(listElement) {
@@ -76,11 +73,11 @@ function displayActiveTags() {
     tags.forEach(tag => {
         tag.lastChild.addEventListener("click", () => {
             updateActiveTags(tag.firstChild);
-            updateListElement();
+            updateListElementTags();
         });
     });
 
     console.log(activeTags);
 }
 
-export { initTagFiltering, updateActiveTags, updateListElement }
+export { initTagFiltering, updateActiveTags, updateListElementTags }

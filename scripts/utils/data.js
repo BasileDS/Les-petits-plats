@@ -20,7 +20,7 @@ async function getAllRecipes(prop) {
         return responseData
     }
 
-    if (prop === "titles") {
+    if (prop === "recipeNames") {
         let titles = [];
 
         responseData.forEach(recipe => {

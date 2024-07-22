@@ -1,7 +1,7 @@
 // Init filters elements and listeners on page load
 function initFilterElements(ingredients, appliances, ustensils) {
 
-    const filters = activateDropdownFilterDOMElements(ingredients, appliances, ustensils);
+    const filters = displayDropdownFilterDOMElements(ingredients, appliances, ustensils);
     
     initSearchBars();
 
@@ -11,22 +11,22 @@ function initFilterElements(ingredients, appliances, ustensils) {
 }
 
 // Display dropdown filter elements
-function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
-    const filters = ["Ingrédients", "Appareils", "Ustensiles"];
+function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
+    const dropdownFilters = ["Ingrédients", "Appareils", "Ustensiles"];
 
     const filtersContainer = document.querySelector(".filter-elements");
 
-    filters.forEach(filter => {
+    dropdownFilters.forEach(dropdownFilter => {
 
         const filterElement = document.createElement("div");
         filterElement.classList.add("filter-element");
 
         const filterButton = document.createElement("div");
         filterButton.classList.add("filter");
-        filterButton.setAttribute("id", `filter-${filter}`);
+        filterButton.setAttribute("id", `filter-${dropdownFilter}`);
         
         const filterName = document.createElement("p");
-        filterName.textContent = filter;
+        filterName.textContent = dropdownFilter;
 
         const arrowIcon = document.createElement("img");
         arrowIcon.classList.add("filter-arrow");
@@ -53,33 +53,33 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         const dropdownList = document.createElement("ul");
         dropdownList.classList.add("dropdow-list");
 
-        if (filter === "Ingrédients") {
+        if (dropdownFilter === "Ingrédients") {
             ingredients.forEach(ingredient => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
+                dropdownListElement.classList.add("dropdow-list-element", "list-element-ingredients");
                 dropdownListElement.textContent = ingredient;
     
                 dropdownList.append(dropdownListElement);
             });
         }
 
-        if (filter === "Appareils") {
+        if (dropdownFilter === "Appareils") {
             appliances.forEach(appliance => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
+                dropdownListElement.classList.add("dropdow-list-element", "list-element-appliances");
                 dropdownListElement.textContent = appliance;
     
                 dropdownList.append(dropdownListElement);
             });
         }
 
-        if (filter === "Ustensiles") {
+        if (dropdownFilter === "Ustensiles") {
             ustensils.forEach(ustensil => {
                 const dropdownListElement = document.createElement("li");
     
-                dropdownListElement.classList.add("dropdow-list-element", `list-element-${filter}`);
+                dropdownListElement.classList.add("dropdow-list-element", "list-element-ustensils");
                 dropdownListElement.textContent = ustensil;
     
                 dropdownList.append(dropdownListElement);
@@ -93,7 +93,7 @@ function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         filtersContainer.appendChild(filterElement);
     });
 
-    return filters
+    return dropdownFilters
 }
 
 // Init search bar listners
