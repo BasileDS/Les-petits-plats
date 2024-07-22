@@ -6,9 +6,40 @@ import * as tags from "./tags.js";
 const mainSearchInput = document.querySelector(".recipes-search-input");
 const mainSearchCompletionZone = document.querySelector(".search-completion-container");
 const cancelButton = document.querySelector(".cancel-input-button");
+const searchButton = document.querySelector("#searchButton");
+
+// Get data from session storage
+const recipeIngedients = await recipesData.getAllRecipes("ingredients");
+const recipesNames = await recipesData.getAllRecipes("recipeNames");
+const recipesDescriptions = await recipesData.getAllRecipes("descriptions");
 
 // Initialize search bar listners
 function initSearchBarCompletion() {
+    searchButton.addEventListener("click", () => {
+        recipeIngedients.forEach(ingredient => {
+            const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
+
+            if (valueToCheck === mainSearchInput.value) {
+                tags.updateActiveTags(ingredient);
+            }
+        });
+
+    });
+
+    mainSearchInput.addEventListener("keydown", (e) => {
+        console.log(e.key);
+        if (e.key === "Enter") {
+            recipeIngedients.forEach(ingredient => {
+                const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
+    
+                if (valueToCheck === mainSearchInput.value) {
+                    tags.updateActiveTags(ingredient);
+                }
+            });
+        }
+
+    });
+
     mainSearchInput.addEventListener("input", () => {
         updateCompletionZone();
     });
@@ -36,22 +67,19 @@ function initSearchBarCompletion() {
 
 // Update mains earch completion zone content
 async function updateCompletionZone() {
-    const ingredientsFilterListDOM = document.querySelectorAll(".list-element-ingredients");
-
-    const recipesNamesDOM = await recipesData.getAllRecipes("recipeNames");
-
     mainSearchCompletionZone.innerHTML = "";
 
     if (mainSearchInput.value.length >= 3) {
-        const activeIngredients = isMatchingFilteredRecipes(ingredientsFilterListDOM, "ingredients");
-        const activeRecipeNames = isMatchingFilteredRecipes(recipesNamesDOM, "recipeNames");
+        const activeIngredients = isMatchingFilteredRecipes(recipeIngedients, "ingredients");
+        const activeRecipeNames = isMatchingFilteredRecipes(recipesNames, "recipeNames");
+        const activeDescription = isMatchingFilteredRecipes(recipesDescriptions, "descriptions");
 
         const SearchInputFilters = document.querySelectorAll(".search-completion-element-text");
 
         SearchInputFilters.forEach(filter => {
-            if (filter.parentNode.firstChild.textContent !== "Recette") {
+            if (filter.parentNode.firstChild.textContent !== "Recette" && filter.parentNode.firstChild.textContent !== "Dans la description") {
                 filter.addEventListener("click", () => {
-                    tags.updateActiveTags(filter);
+                    tags.updateActiveTags(filter.textContent);
                     tags.updateListElementTags();
                 });
             } else {
@@ -82,24 +110,28 @@ function isMatchingFilteredRecipes(elements, type) {
 
     elements.forEach(element => {
         let key;
-        let filterTextValue;
+        let filterTextValueToCheck;
+        let filterTextValueToDisplay;
 
         if (type === "ingredients") {
             key = "Ingrédient";
-            filterTextValue = element.textContent;
-        }
-    
-        if (type === "description") {
-            key = "Description";
-            filterTextValue = element.textContent;
-        }
-    
-        if (type === "recipeNames") {
-            key = "Recette";
-            filterTextValue = element;
+            filterTextValueToCheck = element;
+            filterTextValueToDisplay = element;
         }
 
-        const filterTextLowerCase = filterTextValue.toLowerCase();
+        if (type === "recipeNames") {
+            key = "Recette";
+            filterTextValueToCheck = element;
+            filterTextValueToDisplay = element;
+        }
+    
+        if (type === "descriptions") {
+            key = "Dans la description";
+            filterTextValueToCheck = element.description;
+            filterTextValueToDisplay = element.name;
+        }
+
+        const filterTextLowerCase = filterTextValueToCheck.toLowerCase();
         const filterTextToCheck = removeAccents.removeAccents(filterTextLowerCase);
 
         const inputValueToLowerCase = inputValue.toLowerCase();
@@ -108,9 +140,9 @@ function isMatchingFilteredRecipes(elements, type) {
         const isMatching = filterTextToCheck.includes(inputValueToCheck);
 
         if (isMatching) {
-            displayCompletionMatchingElements(key, filterTextValue);
+            displayCompletionMatchingElements(key, filterTextValueToDisplay);
 
-            matchingValues.push(filterTextValue);
+            matchingValues.push(filterTextValueToDisplay);
         }
     });
 

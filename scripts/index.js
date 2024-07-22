@@ -1,8 +1,8 @@
-import * as recipesData from "./utils/data.js";
 import * as filterElements from "./templates/dropdowFilter.js";
 import * as recipesCards from "./templates/recipesCard.js";
-import * as tags from "./utils/tags.js";
 import * as searchBar from "./utils/mainSearchBar.js";
+import * as recipesData from "./utils/data.js";
+import * as tags from "./utils/tags.js";
 
 // Run all index.js scripts
 async function init() {

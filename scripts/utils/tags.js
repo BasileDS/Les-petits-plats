@@ -7,7 +7,7 @@ function initTagFiltering() {
 
     filtersDOMElements.forEach(listElement => {
         listElement.addEventListener("click", () => {
-            updateActiveTags(listElement);
+            updateActiveTags(listElement.textContent);
             updateListElementTags();
         });
     });
@@ -35,9 +35,8 @@ function updateListElementTags() {
 }
 
 // Update active tags set array
-function updateActiveTags(listElement) {
-    const tagName = listElement.textContent;
-    const isActive = activeTags.has(listElement.textContent);
+function updateActiveTags(tagName) {
+    const isActive = activeTags.has(tagName);
 
     if (!isActive) {
         activeTags.add(tagName);
@@ -72,7 +71,7 @@ function displayActiveTags() {
     const tags = document.querySelectorAll(".active-filter-tag");
     tags.forEach(tag => {
         tag.lastChild.addEventListener("click", () => {
-            updateActiveTags(tag.firstChild);
+            updateActiveTags(tag.firstChild.textContent);
             updateListElementTags();
         });
     });

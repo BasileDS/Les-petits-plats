@@ -1,3 +1,8 @@
+// Set filtered recipes to session storage
+function setFilteredRecipesToSessionStorage() {
+
+}
+
 // Get all recipes from JSON file and add in to session storage if not already done
 async function getAllRecipes(prop) {
     let responseData = {};
@@ -9,11 +14,15 @@ async function getAllRecipes(prop) {
 
         const sessionsData = JSON.stringify(responseData); 
         window.sessionStorage.setItem("recipes", sessionsData);
+
+        console.log("Set fetched data to session storage");
     }
 
     if (sessionStorageData) {
         const sessionStorage = window.sessionStorage.getItem("recipes");
         responseData = JSON.parse(sessionStorage);
+        
+        console.log("Get data from session storage");
     }
     
     if (prop === "all") {
@@ -28,6 +37,33 @@ async function getAllRecipes(prop) {
         });
 
         return titles
+    }
+
+    if (prop === "descriptions") {
+        let descriptions = [];
+
+        responseData.forEach(recipe => {
+            const name = recipe.name;
+            const description = recipe.description;
+        
+            descriptions.push({ name, description });
+        });
+
+        return descriptions
+    }
+
+    if (prop === "ingredients") {
+        let ingredients = [];
+
+        responseData.forEach(recipe => {
+            recipe.ingredients.forEach(ingredient => {
+                ingredients.push(ingredient.ingredient);
+            });
+        });
+
+        const sortedIngredients = new Set(ingredients.sort());
+
+        return sortedIngredients
     }
 }
 

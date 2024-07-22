@@ -136,7 +136,7 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 .search-completion-container {
     position: absolute;
     width: 860px;
-    max-height: 300px;
+    max-height: 180px;
     overflow-y: scroll;
     animation: search-completion-open 300ms;
     border-radius: 10px;
@@ -159,14 +159,14 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     }
   
     to {
-        max-height: 300px;
+        max-height: 180px;
         overflow: hidden;
     }
 }
 
 @keyframes search-completion-close {
     from {
-        max-height: 300px;
+        max-height: 180px;
         overflow: hidden;
     }
   
