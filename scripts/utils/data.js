@@ -5,7 +5,7 @@ function getDropdownFiltersElements(filter) {
             const IngredientFilterList = [];
             const dropdowIngredientListElements = document.querySelectorAll(`.list-element-${filter}`);
             dropdowIngredientListElements.forEach(listElement => {
-                IngredientFilterList.push({ ingredients: listElement});
+                IngredientFilterList.push({ Ingrédients: listElement});
             });
 
             return IngredientFilterList
@@ -14,7 +14,7 @@ function getDropdownFiltersElements(filter) {
             const appliancesFilterList = [];
             const dropdowAppliancesListElements = document.querySelectorAll(`.list-element-${filter}`);
             dropdowAppliancesListElements.forEach(listElement => {
-                appliancesFilterList.push({ appliances: listElement});
+                appliancesFilterList.push({ Appareils: listElement});
             });
 
             return appliancesFilterList
@@ -23,7 +23,7 @@ function getDropdownFiltersElements(filter) {
             const ustensilsFilterList = [];
             const dropdowUstensilsListElements = document.querySelectorAll(`.list-element-${filter}`);
             dropdowUstensilsListElements.forEach(listElement => {
-                ustensilsFilterList.push({ ustensils: listElement});
+                ustensilsFilterList.push({ Ustensiles: listElement});
             });
 
             return ustensilsFilterList
@@ -45,6 +45,16 @@ function getAllFilterDOMElement() {
     return filtersDOM
 }
 
+function getAllDescriptionsDOMElement() {
+    const recipesDescriptionDOM = document.querySelectorAll(".card-description");
+    return recipesDescriptionDOM;
+}
+
+function getAllTitlesDOMElement() {
+    const recipesTitlesDOM = document.querySelectorAll(".recipe-title");
+    return recipesTitlesDOM;
+}
+
 // Get all filter names
 function getAllFilterNames() {
     const filtersNames = new Set;
@@ -64,3 +74,5 @@ function getAllFilterNames() {
 function capitalize(text) {
     return text[0].toUpperCase() + text.slice(1);
 }
+
+export { getDropdownFiltersElements, getAllFilterDOMElement, getAllFilterNames, getAllDescriptionsDOMElement, getAllTitlesDOMElement }

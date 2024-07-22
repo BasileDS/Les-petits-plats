@@ -76,7 +76,7 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     width: 900px;
     border-radius: 10px;
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 
 .cancel-input-button {
@@ -136,15 +136,15 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 .search-completion-container {
     position: absolute;
     width: 860px;
-    max-height: 150px;
+    max-height: 300px;
     overflow-y: scroll;
     animation: search-completion-open 300ms;
     border-radius: 10px;
     margin-top: -15px;
     padding: 20px;
+    box-shadow: 0px 5px 15px #0000001f;
     background-color: white;
-    gap: 15px;
-    z-index: 0;
+    z-index: 2;
 }
 
 .search-completion-container-close {
@@ -159,14 +159,14 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     }
   
     to {
-        max-height: 150px;
+        max-height: 300px;
         overflow: hidden;
     }
 }
 
 @keyframes search-completion-close {
     from {
-        max-height: 150px;
+        max-height: 300px;
         overflow: hidden;
     }
   
@@ -179,18 +179,38 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 
 .search-completion-element {
     display: flex;
-    align-items: flex-end;
-    gap: 15px;
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.search-completion-element:last-child {
+    border-bottom: none;
 }
 
 .search-completion-element p {
-    margin: 0;
+    margin: 2px 0;
+}
+
+.search-completion-element-text {
+    padding: 10px 10px;
+    cursor: pointer;
 }
 
 .search-completion-element-type {
-    width: 75px;
+    width: 65px;
+    padding: 12px 10px 8px 10px;
+    font-size: 0.75em;
+    color: grey;
+}
+
+.results-number {
+    margin: 0 0 10px 10px;
     font-size: 0.8em;
     color: gray;
+}
+
+.no-results {
+    color: #dc5757;
 }
 
 /* Recipes filters styles */

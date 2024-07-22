@@ -13,7 +13,6 @@ async function getRecipes() {
 
 // Run all index.js scripts
 async function init() {
-
     await getRecipes();
     recipesCards.displayRecipesCards(data);
 
