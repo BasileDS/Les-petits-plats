@@ -188,16 +188,21 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
 }
 
 .search-completion-element p {
-    margin: 2px 0;
+    margin: 0;
 }
 
 .search-completion-element-text {
-    padding: 10px 10px;
+    width: 100%;
+    padding: 12px 10px;
     cursor: pointer;
 }
 
+.search-completion-element-text:hover {
+    background-color: rgba(128, 128, 128, 0.11);
+}
+
 .search-completion-element-type {
-    width: 65px;
+    width: 75px;
     padding: 12px 10px 8px 10px;
     font-size: 0.75em;
     color: grey;

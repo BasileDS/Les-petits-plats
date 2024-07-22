@@ -1,8 +1,8 @@
-import * as filterElements from "./templates/filterElements.js";
+import * as filterElements from "./templates/filters.js";
 import * as recipesCards from "./templates/recipesCard.js";
 import * as recipes from "./utils/recipes.js";
 import * as tags from "./utils/tags.js";
-import * as searchBar from "./utils/searchBar.js";
+import * as searchBar from "./utils/mainSearchBar.js";
 
 // Get recipes data from JSON files
 let data = {};
