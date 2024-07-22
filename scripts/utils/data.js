@@ -1,5 +1,85 @@
+// Get all recipes from JSON file and add in to session storage if not already done
+async function getAllRecipes(prop) {
+    let responseData = {};
+    const sessionStorageData = window.sessionStorage.getItem("recipes");
+
+    if (sessionStorageData === null) {
+        const response = await fetch("./data/recipes.json");
+        responseData = await response.json();
+
+        const sessionsData = JSON.stringify(responseData); 
+        window.sessionStorage.setItem("recipes", sessionsData);
+    }
+
+    if (sessionStorageData) {
+        const sessionStorage = window.sessionStorage.getItem("recipes");
+        responseData = JSON.parse(sessionStorage);
+    }
+    
+    if (prop === "all") {
+        return responseData
+    }
+
+    if (prop === "titles") {
+        let titles = [];
+
+        responseData.forEach(recipe => {
+            titles.push(recipe.name);
+        });
+
+        return titles
+    }
+}
+
+//  Get dropdown filter's names list
+async function getDropdownFiltersList(filtersName) {
+    const recipes = await getAllRecipes("all");
+    
+    const filtersRow = [];
+
+    if (filtersName === "ingredients") {
+        recipes.forEach(recipe => {
+            recipe.ingredients.forEach(ingredient => {
+                filtersRow.push(ingredient.ingredient.charAt(0).toUpperCase() + ingredient.ingredient.slice(1));
+            })
+        });
+    }
+
+    if (filtersName === "appliances") {
+        recipes.forEach(recipe => {
+            filtersRow.push(recipe.appliance.charAt(0).toUpperCase() + recipe.appliance.slice(1));
+        });
+    }
+
+    if (filtersName === "ustensils") {
+        recipes.forEach(recipe => {
+            recipe.ustensils.forEach(ustensil => {
+                filtersRow.push(ustensil.charAt(0).toUpperCase() + ustensil.slice(1));
+            }); 
+        });
+    }
+
+    if (filtersName === "all") {
+        const ingredientsLists = await getDropdownFiltersList("ingredients");
+        const appliancesLists = await getDropdownFiltersList("appliances");
+        const ustensilsLists = await getDropdownFiltersList("ustensils");
+
+        const allDropdownFilters = [...new Set(ingredientsLists, appliancesLists, ustensilsLists)];
+
+        const sortedFilters = allDropdownFilters.sort();
+
+        return sortedFilters
+    }
+
+    const filters = [...new Set(filtersRow)];
+
+    const sortedFilters = filters.sort();
+
+    return sortedFilters
+}
+
 // Get all list elements from a specific dropdown filter
-function getDropdownFiltersElements(filter) {
+function getDropdownFiltersDOMElements(filter) {
     switch (filter) {
         case "Ingrédients":
             const IngredientFilterList = [];
@@ -33,28 +113,6 @@ function getDropdownFiltersElements(filter) {
     }
 }
 
-// Get all filter DOM elements
-function getAllFilterDOMElement() {
-    const filtersDOM = new Set;
-    const filtersDOMElements = document.querySelectorAll(".dropdow-list-element");
-    
-    filtersDOMElements.forEach(element => {        
-        filtersDOM.add(element);
-    });
-    
-    return filtersDOM
-}
-
-function getAllDescriptionsDOMElement() {
-    const recipesDescriptionDOM = document.querySelectorAll(".card-description");
-    return recipesDescriptionDOM;
-}
-
-function getAllTitlesDOMElement() {
-    const recipesTitlesDOM = document.querySelectorAll(".recipe-title");
-    return recipesTitlesDOM;
-}
-
 // Get all filter names
 function getAllFilterNames() {
     const filtersNames = new Set;
@@ -75,4 +133,4 @@ function capitalize(text) {
     return text[0].toUpperCase() + text.slice(1);
 }
 
-export { getDropdownFiltersElements, getAllFilterDOMElement, getAllFilterNames, getAllDescriptionsDOMElement, getAllTitlesDOMElement }
+export { getAllRecipes, getDropdownFiltersDOMElements, getDropdownFiltersList, getAllFilterNames }

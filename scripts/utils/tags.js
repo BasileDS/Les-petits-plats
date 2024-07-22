@@ -4,8 +4,9 @@ const activeTags = new Set();
 
 // Init tag activation/desactivation based on user filters choice
 function initTagFiltering() {
-    const filtersDOMElements = recipesData.getAllFilterDOMElement();
-    
+    const filtersDOM = document.querySelectorAll(".dropdow-list-element");
+    const filtersDOMElements = new Set(filtersDOM);
+
     filtersDOMElements.forEach(listElement => {
         listElement.addEventListener("click", () => {
             updateActiveTags(listElement);

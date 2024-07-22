@@ -1,5 +1,10 @@
+import * as recipesData from "/scripts/utils/data.js";
+
 // Display recipes cards
-function displayRecipesCards(recipes) {
+async function displayRecipesCards() {
+
+    const recipes = await recipesData.getAllRecipes("all");
+    
     recipes.forEach(recipe => {
         
         const article = document.createElement("article");

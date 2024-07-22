@@ -10,8 +10,9 @@ const cancelButton = document.querySelector(".cancel-input-button");
 // Initialize search bar listners
 function initSearchBarCompletion(filters) {
 
-    const descriptionListDOM = recipesData.getAllDescriptionsDOMElement();
-    const titlesListDOM = recipesData.getAllTitlesDOMElement();
+    const descriptionListDOM = document.querySelectorAll(".card-description");
+    
+    const titlesListDOM = document.querySelectorAll(".recipe-title");
 
     mainSearchInput.addEventListener("input", () => {
         updateCompletionZone(filters, descriptionListDOM, titlesListDOM);
@@ -40,20 +41,15 @@ function initSearchBarCompletion(filters) {
 
 // Update mains earch completion zone content
 function updateCompletionZone(filters, descriptionDOM, titlesDOM) {
-    const ingredientsListDOM = recipesData.getDropdownFiltersElements(filters[0]); // ingredients
-    const appliancesListDOM = recipesData.getDropdownFiltersElements(filters[1]); // appliances
-    const ustensilsListDOM = recipesData.getDropdownFiltersElements(filters[2]); // ustensils
+    const ingredientsListDOM = recipesData.getDropdownFiltersDOMElements(filters[0]); // ingredients
 
     mainSearchCompletionZone.innerHTML = "";
 
     if (mainSearchInput.value.length >= 3) {
         const ingredientsNb = searchInElements(ingredientsListDOM, "filter");
-        const appliancesNb = searchInElements(appliancesListDOM, "filter");
-        const ustensilsNb = searchInElements(ustensilsListDOM, "filter");
         const titlesNb = searchInElements(titlesDOM, "title");
-        const descriptionsNb = searchInElements(descriptionDOM, "description");
 
-        const resultsNumber = ingredientsNb + appliancesNb + ustensilsNb + descriptionsNb + titlesNb;
+        const resultsNumber = ingredientsNb + titlesNb;
 
         const CompletionFirstFilterNode = document.querySelector(".search-completion-element");
         const pResultsNumber = document.createElement("p");
@@ -70,7 +66,7 @@ function updateCompletionZone(filters, descriptionDOM, titlesDOM) {
         const SearchInputFilters = document.querySelectorAll(".search-completion-element-text");
 
         SearchInputFilters.forEach(filter => {
-            if (filter.parentNode.firstChild.textContent !== "Description" && filter.parentNode.firstChild.textContent !== "Recette") {
+            if (filter.parentNode.firstChild.textContent !== "Recette") {
                 filter.addEventListener("click", () => {
                     tags.updateActiveTags(filter);
                     tags.updateListElement();

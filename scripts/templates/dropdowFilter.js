@@ -10,7 +10,7 @@ function initFilterElements(ingredients, appliances, ustensils) {
     return filters
 }
 
-// Display filter elements
+// Display dropdown filter elements
 function activateDropdownFilterDOMElements(ingredients, appliances, ustensils) {
     const filters = ["Ingrédients", "Appareils", "Ustensiles"];
 

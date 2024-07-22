@@ -1,28 +1,21 @@
-import * as filterElements from "./templates/filters.js";
+import * as recipesData from "./utils/data.js";
+import * as filterElements from "./templates/dropdowFilter.js";
 import * as recipesCards from "./templates/recipesCard.js";
-import * as recipes from "./utils/recipes.js";
 import * as tags from "./utils/tags.js";
 import * as searchBar from "./utils/mainSearchBar.js";
 
-// Get recipes data from JSON files
-let data = {};
-async function getRecipes() {
-    const response = await fetch("./data/recipes.json");
-    data = await response.json();
-}
-
 // Run all index.js scripts
 async function init() {
-    await getRecipes();
-    recipesCards.displayRecipesCards(data);
+    recipesCards.displayRecipesCards();
 
-    const ingredients = recipes.getIngredients(data);
-    const appliances = recipes.getAppliances(data);
-    const ustensils = recipes.getUstensils(data);
+    const ingredients = await recipesData.getDropdownFiltersList("ingredients");
+    const appliances = await recipesData.getDropdownFiltersList("appliances");
+    const ustensils = await recipesData.getDropdownFiltersList("ustensils");
+
     const filters = filterElements.initFilterElements(ingredients, appliances, ustensils);
 
     tags.initTagFiltering(filters);
-    searchBar.initSearchBarCompletion(filters); 
+    searchBar.initSearchBarCompletion(filters);
 }
 
 init();
