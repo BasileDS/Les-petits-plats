@@ -1,20 +1,24 @@
+import * as data from "/scripts/utils/data.js";
+import * as tags from "/scripts/utils/tags.js";
+
+const filtersContainer = document.querySelector(".filter-elements");
+
 // Init filters elements and listeners on page load
-function initFilterElements(ingredients, appliances, ustensils) {
-
-    const filters = displayDropdownFilterDOMElements(ingredients, appliances, ustensils);
+async function initFilterElements() {
+    const dropdownFilters = await data.getAllDropdownFilters();
+    displayDropdownFilterDOMElements(dropdownFilters);
     
-    initSearchBars();
-
     addFilterDropdownAnimation();
 
-    return filters
+    tags.initTagFiltering();
 }
 
 // Display dropdown filter elements
-function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
+function displayDropdownFilterDOMElements(dropdownElements) {
+    filtersContainer.innerHTML = "";
+
     const dropdownFilters = ["Ingrédients", "Appareils", "Ustensiles"];
 
-    const filtersContainer = document.querySelector(".filter-elements");
 
     dropdownFilters.forEach(dropdownFilter => {
 
@@ -54,7 +58,7 @@ function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         dropdownList.classList.add("dropdow-list");
 
         if (dropdownFilter === "Ingrédients") {
-            ingredients.forEach(ingredient => {
+            dropdownElements.ingredients.forEach(ingredient => {
                 const dropdownListElement = document.createElement("li");
     
                 dropdownListElement.classList.add("dropdow-list-element", "list-element-ingredients");
@@ -65,7 +69,7 @@ function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         }
 
         if (dropdownFilter === "Appareils") {
-            appliances.forEach(appliance => {
+            dropdownElements.appliances.forEach(appliance => {
                 const dropdownListElement = document.createElement("li");
     
                 dropdownListElement.classList.add("dropdow-list-element", "list-element-appliances");
@@ -76,7 +80,7 @@ function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         }
 
         if (dropdownFilter === "Ustensiles") {
-            ustensils.forEach(ustensil => {
+            dropdownElements.ustensils.forEach(ustensil => {
                 const dropdownListElement = document.createElement("li");
     
                 dropdownListElement.classList.add("dropdow-list-element", "list-element-ustensils");
@@ -91,30 +95,21 @@ function displayDropdownFilterDOMElements(ingredients, appliances, ustensils) {
         filterButton.append(filterName, arrowIcon);
         filterElement.append(filterButton, filterDropDown);
         filtersContainer.appendChild(filterElement);
-    });
 
-    return dropdownFilters
-}
+        dropdownSearchInput.value = "";
+        dropdownSearchInput.nextElementSibling.style.display = "none";
 
-// Init search bar listners
-function initSearchBars() {
-    const searchInput = document.querySelectorAll(".search-input");
-
-    searchInput.forEach(input => {
-        input.value = "";
-        input.nextElementSibling.style.display = "none";
-
-        const cancelButton = input.nextElementSibling;
+        const cancelButton = dropdownSearchInput.nextElementSibling;
     
-        input.addEventListener("focus", () => {
+        dropdownSearchInput.addEventListener("focus", () => {
             cancelButton.style.display = "block";
             if (cancelButton.parentElement.classList[0] === "dropdown-search" ) {
                 cancelButton.previousElementSibling.style.width = "113px";
             }
         });
         
-        input.addEventListener("focusout", () => {
-            if (!input.value) {
+        dropdownSearchInput.addEventListener("focusout", () => {
+            if (!dropdownSearchInput.value) {
                 cancelButton.style.display = "none";
                 if (cancelButton.parentElement.classList[0] === "dropdown-search" ) {
                     cancelButton.previousElementSibling.style.width = "130px";
@@ -124,7 +119,7 @@ function initSearchBars() {
 
         cancelButton.addEventListener("click", () => {
             cancelButton.style.display = "none";
-            input.value = "";
+            dropdownSearchInput.value = "";
             if (cancelButton.parentElement.classList[0] === "dropdown-search" ) {
                 cancelButton.previousElementSibling.style.width = "130px";
             }
@@ -161,4 +156,4 @@ function addFilterDropdownAnimation() {
 }
 
 // export used functions for index.js
-export { initFilterElements };
+export { initFilterElements, displayDropdownFilterDOMElements, addFilterDropdownAnimation };

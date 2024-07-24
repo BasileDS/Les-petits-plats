@@ -1,6 +1,6 @@
-import * as recipesData from "/scripts/utils/data.js";
-import * as removeAccents from "./removeAccents.js";
 import * as tags from "./tags.js";
+import * as recipes from "./filterRecipes.js";
+import * as removeAccents from "./removeAccents.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
@@ -8,36 +8,38 @@ const mainSearchCompletionZone = document.querySelector(".search-completion-cont
 const cancelButton = document.querySelector(".cancel-input-button");
 const searchButton = document.querySelector("#searchButton");
 
-// Get data from session storage
-const recipeIngedients = await recipesData.getAllRecipes("ingredients");
-const recipesNames = await recipesData.getAllRecipes("recipeNames");
-const recipesDescriptions = await recipesData.getAllRecipes("descriptions");
-
 // Initialize search bar listners
-function initSearchBarCompletion() {
+async function initSearchBarCompletion() {
+    mainSearchInput.value = "";
+
     searchButton.addEventListener("click", () => {
-        recipeIngedients.forEach(ingredient => {
-            const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
+        tags.clearTags();
 
-            if (valueToCheck === mainSearchInput.value) {
-                tags.updateActiveTags(ingredient);
-            }
-        });
+        recipes.updatePageElements();
 
+        hideCompletionZone();
+    });
+
+    cancelButton.addEventListener("click", () => {
+        hideCompletionZone();
+
+        mainSearchInput.value = "";
+        cancelButton.style.display = "none";
+        mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
     });
 
     mainSearchInput.addEventListener("keydown", (e) => {
-        console.log(e.key);
         if (e.key === "Enter") {
-            recipeIngedients.forEach(ingredient => {
-                const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
-    
-                if (valueToCheck === mainSearchInput.value) {
-                    tags.updateActiveTags(ingredient);
-                }
-            });
-        }
+            tags.clearTags();
 
+            recipes.updatePageElements();
+
+            hideCompletionZone();
+
+            mainSearchInput.value = "";
+            cancelButton.style.display = "none";
+            mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+        }
     });
 
     mainSearchInput.addEventListener("input", () => {
@@ -46,41 +48,58 @@ function initSearchBarCompletion() {
 
     mainSearchInput.addEventListener("focus", () => {
         updateCompletionZone();
+
+        cancelButton.style.display = "block";
     });
 
     mainSearchInput.addEventListener("focusin", () => {
         window.addEventListener("click", () => {
             updateCompletionZone();
+
+            cancelButton.style.display = "block";
+            mainSearchInput.placeholder = "";
         });
     });
-
+    
     mainSearchInput.addEventListener("focusout", () => {
         window.addEventListener("click", () => {
             hideCompletionZone();
+            
+            if (mainSearchInput.value !== "") {
+                cancelButton.style.display = "block";
+                mainSearchInput.placeholder = "";
+            } else {
+                cancelButton.style.display = "none";
+                mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+            }
         });
-    });
-
-    cancelButton.addEventListener("click", () => {
-        hideCompletionZone();
     });
 }
 
-// Update mains earch completion zone content
-async function updateCompletionZone() {
+// Update mains dearch completion zone content
+function updateCompletionZone() {
     mainSearchCompletionZone.innerHTML = "";
 
     if (mainSearchInput.value.length >= 3) {
-        const activeIngredients = isMatchingFilteredRecipes(recipeIngedients, "ingredients");
-        const activeRecipeNames = isMatchingFilteredRecipes(recipesNames, "recipeNames");
-        const activeDescription = isMatchingFilteredRecipes(recipesDescriptions, "descriptions");
+        const activeFilters = recipes.getAllInputMatchingRecipesValues();
 
         const SearchInputFilters = document.querySelectorAll(".search-completion-element-text");
 
         SearchInputFilters.forEach(filter => {
             if (filter.parentNode.firstChild.textContent !== "Recette" && filter.parentNode.firstChild.textContent !== "Dans la description") {
                 filter.addEventListener("click", () => {
-                    tags.updateActiveTags(filter.textContent);
-                    tags.updateListElementTags();
+                    const inputValueToCheck = removeAccents.removeAccents(mainSearchInput.value.toLowerCase());
+                    const isActive = tags.isTagActive(inputValueToCheck);
+            
+                    if (!isActive) {
+                        tags.clearTags();
+
+                        tags.updateActiveTags(filter.textContent);
+                        
+                        recipes.filterBy("tag");
+                        
+                        tags.updateListElementTags();
+                    }
                 });
             } else {
                 filter.addEventListener("click", () => {
@@ -88,9 +107,7 @@ async function updateCompletionZone() {
                 });
             }
         });
-
-        const resultsNumber = activeIngredients.length + activeRecipeNames.length;
-        displayResultsNumber(resultsNumber)
+        displayResultsNumber(activeFilters.length);
     } else {
         hideCompletionZone();
     }
@@ -102,77 +119,30 @@ function hideCompletionZone() {
     mainSearchCompletionZone.style.display = "none";
 }
 
-// Check if input value is matching with on of several filter elements (ingredients, appliances, ustensils)
-function isMatchingFilteredRecipes(elements, type) {
-    const matchingValues = [];
-
-    const inputValue = mainSearchInput.value;
-
-    elements.forEach(element => {
-        let key;
-        let filterTextValueToCheck;
-        let filterTextValueToDisplay;
-
-        if (type === "ingredients") {
-            key = "Ingrédient";
-            filterTextValueToCheck = element;
-            filterTextValueToDisplay = element;
-        }
-
-        if (type === "recipeNames") {
-            key = "Recette";
-            filterTextValueToCheck = element;
-            filterTextValueToDisplay = element;
-        }
-    
-        if (type === "descriptions") {
-            key = "Dans la description";
-            filterTextValueToCheck = element.description;
-            filterTextValueToDisplay = element.name;
-        }
-
-        const filterTextLowerCase = filterTextValueToCheck.toLowerCase();
-        const filterTextToCheck = removeAccents.removeAccents(filterTextLowerCase);
-
-        const inputValueToLowerCase = inputValue.toLowerCase();
-        const inputValueToCheck = removeAccents.removeAccents(inputValueToLowerCase);
-
-        const isMatching = filterTextToCheck.includes(inputValueToCheck);
-
-        if (isMatching) {
-            displayCompletionMatchingElements(key, filterTextValueToDisplay);
-
-            matchingValues.push(filterTextValueToDisplay);
-        }
-    });
-
-    return matchingValues
-}
-
 // Display results in completion zone
 function displayCompletionMatchingElements(key, filterTextValue) {
     mainSearchCompletionZone.style.display = "grid";
 
-            const divFilter = document.createElement("div");
-            divFilter.classList.add("search-completion-element");
-            
-            const pFilterText = document.createElement("p");
-            pFilterText.classList.add("search-completion-element-text");
+        const divFilter = document.createElement("div");
+        divFilter.classList.add("search-completion-element");
+        
+        const pFilterText = document.createElement("p");
+        pFilterText.classList.add("search-completion-element-text");
 
-            if (key === "description") {
-                const startIndex = filterTextValue.indexOf(inputValue);
-                const endIndex = startIndex + mainSearchInput.value.length;
-                pFilterText.innerHTML = `${filterTextValue.slice(0, startIndex)}<span class="is-active-in-description">${filterTextValue.slice(startIndex, endIndex)}</span>${filterTextValue.slice(endIndex)}`;
-            } else {
-                pFilterText.textContent = filterTextValue;
-            }
+        if (key === "description") {
+            const startIndex = filterTextValue.indexOf(inputValue);
+            const endIndex = startIndex + mainSearchInput.value.length;
+            pFilterText.innerHTML = `${filterTextValue.slice(0, startIndex)}<span class="is-active-in-description">${filterTextValue.slice(startIndex, endIndex)}</span>${filterTextValue.slice(endIndex)}`;
+        } else {
+            pFilterText.textContent = filterTextValue;
+        }
 
-            const pKey = document.createElement("p");
-            pKey.classList.add("search-completion-element-type");
-            pKey.textContent = key;
-            
-            divFilter.append(pKey, pFilterText);
-            mainSearchCompletionZone.appendChild(divFilter);
+        const pKey = document.createElement("p");
+        pKey.classList.add("search-completion-element-type");
+        pKey.textContent = key;
+        
+        divFilter.append(pKey, pFilterText);
+        mainSearchCompletionZone.appendChild(divFilter);
 }
 
 // Display the amout of results in completion zone
@@ -193,4 +163,4 @@ function displayResultsNumber(resultsNumber) {
     mainSearchCompletionZone.insertBefore(pResultsNumber, CompletionFirstFilterNode);
 }
 
-export { initSearchBarCompletion }
+export { initSearchBarCompletion, displayCompletionMatchingElements }

@@ -1,12 +1,16 @@
-import * as recipesData from "/scripts/utils/data.js";
+const recipesContainer = document.querySelector(".recipes-cards-wrapper");
 
 // Display recipes cards
-async function displayRecipesCards() {
+async function displayRecipesCards(recipes) {
 
-    const recipes = await recipesData.getAllRecipes("all");
-    
+    // if (recipes[0] === null || recipes === null) {
+    //     return
+    // }
+    console.log("check after", recipes);
+
+    recipesContainer.innerHTML = "";
+
     recipes.forEach(recipe => {
-        
         const article = document.createElement("article");
         article.classList.add("recipe-card");
         
@@ -47,6 +51,7 @@ async function displayRecipesCards() {
             const pIngredient = document.createElement("div");
             pIngredient.classList.add("card-ingredient");
             const pIngredientName = document.createElement("p");
+            pIngredientName.classList.add("card-ingredient-name");
             const pIngredientQuantity = document.createElement("p");
 
             pIngredientName.textContent = ingredient.ingredient;
@@ -67,7 +72,6 @@ async function displayRecipesCards() {
         divRecipeContent.append(h2, pRecipeCat, pDescription, pIngredientCat, divIngredients);
         article.append(divImage, divRecipeContent);
         
-        const recipesContainer = document.querySelector(".recipes-cards-wrapper");
         recipesContainer.appendChild(article);
     });
 }

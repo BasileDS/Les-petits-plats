@@ -1,7 +1,11 @@
+import * as recipes from "./filterRecipes.js";
+import * as removeAccents from "./removeAccents.js";
+
+
 const activeTags = new Set();
 
 // Init tag activation/desactivation based on user filters choice
-function initTagFiltering() {
+async function initTagFiltering() {
     const filtersDOM = document.querySelectorAll(".dropdow-list-element");
     const filtersDOMElements = new Set(filtersDOM);
 
@@ -9,6 +13,8 @@ function initTagFiltering() {
         listElement.addEventListener("click", () => {
             updateActiveTags(listElement.textContent);
             updateListElementTags();
+
+            recipes.filterBy("tag");
         });
     });
 }
@@ -35,7 +41,7 @@ function updateListElementTags() {
 }
 
 // Update active tags set array
-function updateActiveTags(tagName) {
+async function updateActiveTags(tagName) {
     const isActive = activeTags.has(tagName);
 
     if (!isActive) {
@@ -48,8 +54,23 @@ function updateActiveTags(tagName) {
     displayActiveTags();
 }
 
+// Returns true if tag is active
+function isTagActive(tagToCheck) {
+    const activeTags = document.querySelectorAll(".active-filter-tag");
+    let test = 0;
+
+    activeTags.forEach(tag => {
+        const tagName = removeAccents.removeAccents(tag.textContent.toLowerCase());
+        const tagNameToCheck = removeAccents.removeAccents(tagToCheck.toLowerCase());
+
+        tagName === tagNameToCheck ? test = 1 : test = 0;
+    });
+
+    return test
+}
+
 // Display active tags based on active tags set array
-function displayActiveTags() {
+async function displayActiveTags() {
     const activeFiltersContainer = document.querySelector(".active-filters");
     activeFiltersContainer.innerHTML = "";
 
@@ -70,13 +91,26 @@ function displayActiveTags() {
 
     const tags = document.querySelectorAll(".active-filter-tag");
     tags.forEach(tag => {
-        tag.lastChild.addEventListener("click", () => {
+        tag.lastChild.addEventListener("click", () => { // Tag close cross
             updateActiveTags(tag.firstChild.textContent);
             updateListElementTags();
+
+            recipes.filterBy("tag");
         });
     });
-
-    console.log(activeTags);
 }
 
-export { initTagFiltering, updateActiveTags, updateListElementTags }
+// Clear all active tags
+function clearTags() {
+    const activeFiltersContainer = document.querySelector(".active-filters");
+    activeFiltersContainer.innerHTML = "";
+    activeTags.clear();
+}
+
+// Returns all active tags
+function getActiveTags() {
+    const activeTags = document.querySelectorAll(".active-filter-tag");
+    return activeTags;
+}
+
+export { initTagFiltering, displayActiveTags, updateActiveTags, updateListElementTags, isTagActive, clearTags, getActiveTags }
