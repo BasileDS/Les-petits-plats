@@ -1,6 +1,8 @@
 import * as tags from "./tags.js";
 import * as recipes from "./filterRecipes.js";
 import * as removeAccents from "./removeAccents.js";
+import * as cardTemplate from "/scripts/templates/recipesCard.js";
+import * as dropdownFilter from "/scripts/templates/dropdowFilter.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
@@ -13,10 +15,16 @@ async function initSearchBarCompletion() {
     mainSearchInput.value = "";
 
     searchButton.addEventListener("click", () => {
+        mainSearchInput.blur();
+
         tags.clearTags();
-
-        recipes.updatePageElements();
-
+        
+        if (mainSearchInput.value === "") {
+            cardTemplate.displayRecipesCards(recipes.allRecipes);
+            dropdownFilter.initFilterElements();
+        } else {
+            recipes.updatePageElements();
+        }
         hideCompletionZone();
     });
 
@@ -30,15 +38,23 @@ async function initSearchBarCompletion() {
 
     mainSearchInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
+            mainSearchInput.blur();
+
             tags.clearTags();
-
-            recipes.updatePageElements();
-
+            
+            if (mainSearchInput.value === "") {
+                cardTemplate.displayRecipesCards(recipes.allRecipes);
+                dropdownFilter.initFilterElements();
+            } else {
+                recipes.updatePageElements();
+            }
+            
             hideCompletionZone();
-
+            
             mainSearchInput.value = "";
             cancelButton.style.display = "none";
             mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+
         }
     });
 
@@ -93,11 +109,8 @@ function updateCompletionZone() {
             
                     if (!isActive) {
                         tags.clearTags();
-
                         tags.updateActiveTags(filter.textContent);
-                        
                         recipes.filterBy("tag");
-                        
                         tags.updateListElementTags();
                     }
                 });
@@ -107,7 +120,12 @@ function updateCompletionZone() {
                 });
             }
         });
+
         displayResultsNumber(activeFilters.length);
+    
+    } else if (mainSearchInput.value.length < 3 && mainSearchInput.value.length !== 0) {
+        displayCompletionMatchingElements("errorMessage");
+        
     } else {
         hideCompletionZone();
     }
@@ -133,6 +151,10 @@ function displayCompletionMatchingElements(key, filterTextValue) {
             const startIndex = filterTextValue.indexOf(inputValue);
             const endIndex = startIndex + mainSearchInput.value.length;
             pFilterText.innerHTML = `${filterTextValue.slice(0, startIndex)}<span class="is-active-in-description">${filterTextValue.slice(startIndex, endIndex)}</span>${filterTextValue.slice(endIndex)}`;
+        } else if (key === "errorMessage") {
+            displayResultsNumber(-1);
+
+            return
         } else {
             pFilterText.textContent = filterTextValue;
         }
@@ -156,6 +178,8 @@ function displayResultsNumber(resultsNumber) {
         pResultsNumber.textContent = `${resultsNumber} élément correspond à votre recherche`;
     } else if (resultsNumber > 1) {
         pResultsNumber.textContent = `${resultsNumber} éléments correspondent à votre recherche`;
+    } else if (resultsNumber === -1) {
+        pResultsNumber.textContent = "Veuillez saisir au moins trois caractères";
     } else {
         pResultsNumber.textContent = "Aucun éléments correspondent à votre recherche";
     }
