@@ -14,6 +14,7 @@ const searchButton = document.querySelector("#searchButton");
 async function initSearchBarCompletion() {
     mainSearchInput.value = "";
 
+    //  Click on search button
     searchButton.addEventListener("click", () => {
         mainSearchInput.blur();
 
@@ -28,6 +29,7 @@ async function initSearchBarCompletion() {
         hideCompletionZone();
     });
 
+    //  Click on cancel button
     cancelButton.addEventListener("click", () => {
         hideCompletionZone();
 
@@ -36,6 +38,7 @@ async function initSearchBarCompletion() {
         mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
     });
 
+    //  Press enter while searching
     mainSearchInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             mainSearchInput.blur();

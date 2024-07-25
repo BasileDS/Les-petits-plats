@@ -35,7 +35,7 @@ function filterBy(filter) {
 }
 
 // Update page elements : tags, dropdown filters, recipe cards
-async function updatePageElements() {
+function updatePageElements() {
     recipeIngedients.forEach(ingredient => {
 
         const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
@@ -61,8 +61,6 @@ async function updatePageElements() {
             tags.updateListElementTags();
             
             const recipesToDisplay = filterBy("searchBar");
-            console.log("check before", recipesToDisplay);
-
 
             cardTemplate.displayRecipesCards(recipesToDisplay);
         }
@@ -99,7 +97,6 @@ function filterByInputValue() {
 
     
     if (recipesFromInput.length !== 0) {
-        console.log("check", recipesFromInput);
         setToSessionStorage(recipesFromInput);
     }
 
@@ -349,4 +346,4 @@ async function getFilteredRecipesFromSessionStorage() {
     return responseData
 }
 
-export { updatePageElements, filterByInputValue, getInputMatchingRecipesValues, getAllInputMatchingRecipesValues, filterBy, setToSessionStorage }
+export { allRecipes, updatePageElements, filterByInputValue, getInputMatchingRecipesValues, getAllInputMatchingRecipesValues, filterBy, setToSessionStorage }
