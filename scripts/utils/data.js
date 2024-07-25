@@ -196,8 +196,22 @@ function getAllFilterNames() {
     return filtersNames
 }
 
+// Set filtered recipes to session storage
+function setToSessionStorage(filteredRecipes) {
+    const sessionData = JSON.stringify(filteredRecipes);
+    window.sessionStorage.setItem("filteredRecipes", sessionData);
+}
+
+// Set filtered recipes to session storage
+async function getFilteredRecipesFromSessionStorage() {
+    const sessionStorage = window.sessionStorage.getItem("filteredRecipes");
+    const responseData = JSON.parse(sessionStorage);
+
+    return responseData
+}
+
 function capitalize(text) {
     return text[0].toUpperCase() + text.slice(1);
 }
 
-export { getAllRecipes, getDropdownFiltersFromCardsDOM, getAllDropdownFilters, getDropdownFiltersDOMElements, getDropdownFiltersList, getAllFilterNames }
+export { getAllRecipes, setToSessionStorage, getFilteredRecipesFromSessionStorage, getDropdownFiltersFromCardsDOM, getAllDropdownFilters, getDropdownFiltersDOMElements, getDropdownFiltersList, getAllFilterNames }

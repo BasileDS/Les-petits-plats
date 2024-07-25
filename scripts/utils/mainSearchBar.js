@@ -11,7 +11,7 @@ const cancelButton = document.querySelector(".cancel-input-button");
 const searchButton = document.querySelector("#searchButton");
 
 // Initialize search bar listners
-async function initSearchBarCompletion() {
+async function initSearchBar() {
     mainSearchInput.value = "";
 
     //  Click on search button
@@ -190,4 +190,4 @@ function displayResultsNumber(resultsNumber) {
     mainSearchCompletionZone.insertBefore(pResultsNumber, CompletionFirstFilterNode);
 }
 
-export { initSearchBarCompletion, displayCompletionMatchingElements }
+export { initSearchBar, displayCompletionMatchingElements }

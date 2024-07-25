@@ -10,7 +10,7 @@ async function initFilterElements() {
     
     addFilterDropdownAnimation();
 
-    tags.initTagFiltering();
+    tags.initDropdownFiltering();
 }
 
 // Display dropdown filter elements
@@ -18,7 +18,6 @@ function displayDropdownFilterDOMElements(dropdownElements) {
     filtersContainer.innerHTML = "";
 
     const dropdownFilters = ["Ingrédients", "Appareils", "Ustensiles"];
-
 
     dropdownFilters.forEach(dropdownFilter => {
 

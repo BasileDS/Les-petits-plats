@@ -5,14 +5,13 @@ import * as removeAccents from "./removeAccents.js";
 const activeTags = new Set();
 
 // Init tag activation/desactivation based on user filters choice
-async function initTagFiltering() {
+function initDropdownFiltering() {
     const filtersDOM = document.querySelectorAll(".dropdow-list-element");
     const filtersDOMElements = new Set(filtersDOM);
 
-    filtersDOMElements.forEach(listElement => {
+    filtersDOMElements.forEach(listElement => { // Listen to dropdown filters
         listElement.addEventListener("click", () => {
             updateActiveTags(listElement.textContent);
-            updateListElementTags();
 
             recipes.filterBy("tag");
         });
@@ -51,22 +50,27 @@ async function updateActiveTags(tagName) {
     } else {
         console.log("Error while checking tag status");
     }
+    
     displayActiveTags();
 }
 
 // Returns true if tag is active
-function isTagActive(tagToCheck) {
+function isTagActive(tagToCheck) {    
     const activeTags = document.querySelectorAll(".active-filter-tag");
-    let test = 0;
 
-    activeTags.forEach(tag => {
-        const tagName = removeAccents.removeAccents(tag.textContent.toLowerCase());
-        const tagNameToCheck = removeAccents.removeAccents(tagToCheck.toLowerCase());
-
-        tagName === tagNameToCheck ? test = 1 : test = 0;
-    });
-
-    return test
+    if (activeTags.length === 0) {
+        return false
+    } else {
+        activeTags.forEach(tag => {
+            const tagName = removeAccents.removeAccents(tag.textContent.toLowerCase());
+            const tagNameToCheck = removeAccents.removeAccents(tagToCheck.toLowerCase());
+            
+            if (tagName === tagNameToCheck) {
+                return true
+            }
+        });
+    }
+    
 }
 
 // Display active tags based on active tags set array
@@ -93,7 +97,7 @@ async function displayActiveTags() {
     tags.forEach(tag => {
         tag.lastChild.addEventListener("click", () => { // Tag close cross
             updateActiveTags(tag.firstChild.textContent);
-            updateListElementTags();
+            initDropdownFiltering();
 
             recipes.filterBy("tag");
         });
@@ -113,4 +117,4 @@ function getActiveTags() {
     return activeTags;
 }
 
-export { initTagFiltering, displayActiveTags, updateActiveTags, updateListElementTags, isTagActive, clearTags, getActiveTags }
+export { initDropdownFiltering, displayActiveTags, updateActiveTags, updateListElementTags, isTagActive, clearTags, getActiveTags }

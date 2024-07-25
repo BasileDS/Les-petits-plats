@@ -2,12 +2,6 @@ const recipesContainer = document.querySelector(".recipes-cards-wrapper");
 
 // Display recipes cards
 async function displayRecipesCards(recipes) {
-
-    // if (recipes[0] === null || recipes === null) {
-    //     return
-    // }
-    console.log("check after", recipes);
-
     recipesContainer.innerHTML = "";
 
     recipes.forEach(recipe => {

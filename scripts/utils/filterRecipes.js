@@ -40,30 +40,24 @@ function updatePageElements() {
 
         const valueToCheck = removeAccents.removeAccents(ingredient.toLowerCase());
         const inputValueToCheck = removeAccents.removeAccents(mainSearchInput.value.toLowerCase());
-
-        const isActive = tags.isTagActive(inputValueToCheck);
         
+        const isActive = tags.isTagActive(inputValueToCheck);
+
         const inputValueLength = inputValueToCheck.length;
         const valueIndex = valueToCheck.indexOf(inputValueToCheck);
         const inputValueIndex = valueIndex + inputValueLength;
         const slicedValueToCheck = valueToCheck.slice(valueIndex, inputValueIndex);
 
         if (!isActive && slicedValueToCheck === inputValueToCheck) {
-            
             if (!isActive && valueToCheck === inputValueToCheck) {
                 tags.updateActiveTags(ingredient);
 
                 filterBy("tag");
             }
-
-            tags.initTagFiltering();
-            
-            tags.updateListElementTags();
-            
-            const recipesToDisplay = filterBy("searchBar");
-
-            cardTemplate.displayRecipesCards(recipesToDisplay);
         }
+
+        const recipesToDisplay = filterBy("searchBar");
+        cardTemplate.displayRecipesCards(recipesToDisplay);
     });
 }
 
@@ -90,14 +84,12 @@ function filterByInputValue() {
         });
     });
 
-    
     const dropdownElements = data.getDropdownFiltersFromCardsDOM(recipesFromInput);
     dropdownFilter.displayDropdownFilterDOMElements(dropdownElements);
     dropdownFilter.addFilterDropdownAnimation();
-
     
     if (recipesFromInput.length !== 0) {
-        setToSessionStorage(recipesFromInput);
+        data.setToSessionStorage(recipesFromInput);
     }
 
     return recipesFromInput
@@ -119,7 +111,7 @@ async function filterByTags() {
     });
 
     const recipesFromTag = [];
-    const activeFilteredRecipes = await getFilteredRecipesFromSessionStorage();
+    const activeFilteredRecipes = await data.getFilteredRecipesFromSessionStorage();
 
     activeFilteredRecipes.forEach(recipe => {
         activeTags.forEach(activeTag => {
@@ -131,7 +123,7 @@ async function filterByTags() {
         });
     });
 
-    setToSessionStorage(recipesFromTag);
+    data.setToSessionStorage(recipesFromTag);
 
     if (activeTagsDOM.length !== 0) {
         cardTemplate.displayRecipesCards(recipesFromTag);
@@ -145,7 +137,7 @@ async function filterByTags() {
         cardTemplate.displayRecipesCards(allRecipes);
         dropdownFilter.initFilterElements();
 
-        setToSessionStorage(allRecipes);
+        data.setToSessionStorage(allRecipes);
     }
 }
 
@@ -332,18 +324,4 @@ function getInputMatchingRecipesValues(type) {
     return { valuesToDisplay, activeFilterValues }
 }
 
-// Set filtered recipes to session storage
-function setToSessionStorage(filteredRecipes) {
-    const sessionData = JSON.stringify(filteredRecipes);
-    window.sessionStorage.setItem("filteredRecipes", sessionData);
-}
-
-// Set filtered recipes to session storage
-async function getFilteredRecipesFromSessionStorage() {
-    const sessionStorage = window.sessionStorage.getItem("filteredRecipes");
-    const responseData = JSON.parse(sessionStorage);
-
-    return responseData
-}
-
-export { allRecipes, updatePageElements, filterByInputValue, getInputMatchingRecipesValues, getAllInputMatchingRecipesValues, filterBy, setToSessionStorage }
+export { allRecipes, updatePageElements, filterByInputValue, getInputMatchingRecipesValues, getAllInputMatchingRecipesValues, filterBy }
