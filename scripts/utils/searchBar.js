@@ -1,8 +1,8 @@
-import * as tags from "./tags.js";
-import * as recipes from "./filterRecipes.js";
-import * as removeAccents from "./removeAccents.js";
+import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
-import * as dropdownFilter from "/scripts/templates/dropdowFilter.js";
+import * as tag from "/scripts/templates/tag.js";
+import * as filters from "./filters.js";
+import * as data from "./data.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
@@ -10,71 +10,75 @@ const mainSearchCompletionZone = document.querySelector(".search-completion-cont
 const cancelButton = document.querySelector(".cancel-input-button");
 const searchButton = document.querySelector("#searchButton");
 
-// Initialize search bar listners
-async function initSearchBar() {
-    mainSearchInput.value = "";
+// Init search bar elements and listeners
+function initSearchBar() {
 
-    //  Click on search button
-    searchButton.addEventListener("click", () => {
-        mainSearchInput.blur();
+    initSearchBarElements();
 
-        tags.clearTags();
-        
-        if (mainSearchInput.value === "") {
-            cardTemplate.displayRecipesCards(recipes.allRecipes);
-            dropdownFilter.initFilterElements();
-        } else {
-            recipes.updatePageElements();
-        }
-        hideCompletionZone();
-    });
-
-    //  Click on cancel button
-    cancelButton.addEventListener("click", () => {
-        hideCompletionZone();
-
-        mainSearchInput.value = "";
-        cancelButton.style.display = "none";
-        mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
-    });
-
-    //  Press enter while searching
     mainSearchInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
-            mainSearchInput.blur();
-
-            tags.clearTags();
-            
-            if (mainSearchInput.value === "") {
-                cardTemplate.displayRecipesCards(recipes.allRecipes);
-                dropdownFilter.initFilterElements();
-            } else {
-                recipes.updatePageElements();
-            }
-            
             hideCompletionZone();
             
-            mainSearchInput.value = "";
-            cancelButton.style.display = "none";
-            mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
-
+            runSearch();
         }
     });
 
+    searchButton.addEventListener("click", () => {
+        hideCompletionZone();
+        
+        runSearch();
+    });
+}
+
+// Run matching data research
+async function runSearch() {
+    mainSearchInput.blur();
+
+    if (mainSearchInput.value === "") {
+        console.log("Display all recipes");
+        cardTemplate.displayRecipesCards(data.allRecipes);
+
+        const allDropdownFilters = data.getActiveDropdownFiltersList(allRecipes);
+        dropdownTemplate.displayDropdownElements(allDropdownFilters);
+
+        tag.removeAllTags();
+
+    } else {
+        console.log("Run search");
+
+        tag.removeAllTags();
+
+    /***  Start function to run to filter recipes and dropdown filters  ***/
+
+        const filteredRecipes = filters.getRecipesByInputValue();
+        cardTemplate.displayRecipesCards(filteredRecipes);
+
+        const activeDropdownFilters = data.getActiveDropdownFiltersList(filteredRecipes);
+        dropdownTemplate.displayDropdownElements(activeDropdownFilters);
+        
+
+    /**********************************************************************/
+    }
+
+    mainSearchInput.value = "";
+    cancelButton.style.display = "none";
+    mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+}
+
+// Display palceholder and close button based on user actions
+function initSearchBarElements() {
     mainSearchInput.addEventListener("input", () => {
         updateCompletionZone();
     });
 
     mainSearchInput.addEventListener("focus", () => {
-        updateCompletionZone();
-
         cancelButton.style.display = "block";
     });
 
     mainSearchInput.addEventListener("focusin", () => {
-        window.addEventListener("click", () => {
-            updateCompletionZone();
+        updateCompletionZone();
 
+        window.addEventListener("click", () => {
             cancelButton.style.display = "block";
             mainSearchInput.placeholder = "";
         });
@@ -83,7 +87,7 @@ async function initSearchBar() {
     mainSearchInput.addEventListener("focusout", () => {
         window.addEventListener("click", () => {
             hideCompletionZone();
-            
+
             if (mainSearchInput.value !== "") {
                 cancelButton.style.display = "block";
                 mainSearchInput.placeholder = "";
@@ -93,6 +97,11 @@ async function initSearchBar() {
             }
         });
     });
+
+    cancelButton.addEventListener("click", () => {
+        cancelButton.style.display = "none";
+        mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+    });
 }
 
 // Update mains dearch completion zone content
@@ -100,32 +109,8 @@ function updateCompletionZone() {
     mainSearchCompletionZone.innerHTML = "";
 
     if (mainSearchInput.value.length >= 3) {
-        const activeFilters = recipes.getAllInputMatchingRecipesValues();
-
-        const SearchInputFilters = document.querySelectorAll(".search-completion-element-text");
-
-        SearchInputFilters.forEach(filter => {
-            if (filter.parentNode.firstChild.textContent !== "Recette" && filter.parentNode.firstChild.textContent !== "Dans la description") {
-                filter.addEventListener("click", () => {
-                    const inputValueToCheck = removeAccents.removeAccents(mainSearchInput.value.toLowerCase());
-                    const isActive = tags.isTagActive(inputValueToCheck);
-            
-                    if (!isActive) {
-                        tags.clearTags();
-                        tags.updateActiveTags(filter.textContent);
-                        recipes.filterBy("tag");
-                        tags.updateListElementTags();
-                    }
-                });
-            } else {
-                filter.addEventListener("click", () => {
-                    console.log("filter recipes");
-                });
-            }
-        });
-
-        displayResultsNumber(activeFilters.length);
-    
+        displayCompletionMatchingElements("key", mainSearchInput.value)
+        displayResultsNumber(mainSearchInput.value.length)
     } else if (mainSearchInput.value.length < 3 && mainSearchInput.value.length !== 0) {
         displayCompletionMatchingElements("errorMessage");
         
@@ -190,4 +175,4 @@ function displayResultsNumber(resultsNumber) {
     mainSearchCompletionZone.insertBefore(pResultsNumber, CompletionFirstFilterNode);
 }
 
-export { initSearchBar, displayCompletionMatchingElements }
+export { initSearchBar }

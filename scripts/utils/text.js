@@ -1,3 +1,8 @@
+// Capitalize text
+function capitalize(text) {
+    return text[0].toUpperCase() + text.slice(1);
+}
+// Check if has accent or remove accents from a text
 const characterMap = {
 	"À": "A",
 	"Á": "A",
@@ -476,4 +481,4 @@ const hasAccents = function(string) {
 	return !!string.match(firstAccent);
 };
 
-export { removeAccents, hasAccents }
+export { removeAccents, hasAccents, capitalize }

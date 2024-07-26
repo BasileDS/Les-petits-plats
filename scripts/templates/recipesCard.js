@@ -1,7 +1,8 @@
-const recipesContainer = document.querySelector(".recipes-cards-wrapper");
+import * as state from "/scripts/utils/state.js";
 
 // Display recipes cards
-async function displayRecipesCards(recipes) {
+function displayRecipesCards(recipes) {
+    const recipesContainer = document.querySelector(".recipes-cards-wrapper");
     recipesContainer.innerHTML = "";
 
     recipes.forEach(recipe => {

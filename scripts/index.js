@@ -1,19 +1,17 @@
-import * as filterElements from "./templates/dropdowFilter.js";
-import * as recipesCards from "./templates/recipesCard.js";
-import * as searchBar from "./utils/mainSearchBar.js";
+import * as dropdownTemplate from "./templates/dropdownElement.js";
+import * as cardTemplate from "./templates/recipesCard.js";
+import * as searchBar from "./utils/searchBar.js";
+import * as state from "/scripts/utils/state.js";
 import * as data from "./utils/data.js";
 
 // Run all index.js scripts
 async function init() {
-    sessionStorage.clear();
+    data.initData();
 
-    const allRecipes = await data.getAllRecipes("all");
-    
-    data.setToSessionStorage(allRecipes);
+    cardTemplate.displayRecipesCards(data.allRecipes);
 
-    recipesCards.displayRecipesCards(allRecipes);
-
-    filterElements.initFilterElements();
+    const dropdownFilters = data.getActiveDropdownFiltersList(data.allRecipes); 
+    dropdownTemplate.displayDropdownElements(dropdownFilters);
 
     searchBar.initSearchBar();
 }
