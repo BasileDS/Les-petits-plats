@@ -1,5 +1,6 @@
-
 import * as text from "./text.js";
+import * as data from "./data.js";
+import * as state from "./state.js";
 
 const response = await fetch("./data/recipes.json");
 const allRecipes = await response.json(); // All recipes
@@ -15,6 +16,8 @@ const allDescriptions = [];
 async function initData() {
 
     allRecipes.forEach(recipe => {
+        state.activeRecipes.push(recipe);
+
         recipe.ingredients.forEach(ingredient => {
             allIngredients.push(ingredient.ingredient); // All ingredients
         })
@@ -32,41 +35,38 @@ async function initData() {
 }
 
 // Get on page dropdown filters list in an object { ingredients, appliances, ustensils }
-function getActiveDropdownFiltersList(recipes) {
-    const ingredients = [];
-    const appliances = [];
-    const ustensils = [];
+function updateActiveDropdownFiltersList(recipes) {
+    let sortedIngredients = [];
+    let sortedAppliances = [];
+    let sortedUstensils = [];
 
-    let sortedIngredients = []
-    let sortedAppliances = []
-    let sortedUstensils = []
 
-    recipes.forEach(recipe => {
+     recipes.forEach(recipe => {
 
         recipe.ingredients.forEach(ingredient => {
             const name = ingredient.ingredient;
             const capitalizeName = text.capitalize(name);
-            ingredients.push(capitalizeName);
+            state.activeDropdownIngredients.push(capitalizeName);
         });
-        sortedIngredients = [...new Set(ingredients)];
+        sortedIngredients = [...new Set(state.activeDropdownIngredients)];
 
         const name = recipe.appliance; 
         const capitalizeName = text.capitalize(name);
-        appliances.push(capitalizeName);
-        sortedAppliances = [...new Set(appliances)];
+        state.activeDropdownAppliances.push(capitalizeName);
+        sortedAppliances = [...new Set(state.activeDropdownAppliances)];
 
         recipe.ustensils.forEach(ustensil => {
             const capitalizeName = text.capitalize(ustensil);
-            ustensils.push(capitalizeName);
+            state.activeDropdownUstensils.push(capitalizeName);
         }); 
-        sortedUstensils = [...new Set(ustensils)];
+        sortedUstensils = [...new Set(state.activeDropdownUstensils)];
     });
 
-    const dropdownFilters = { ingredients: sortedIngredients, 
-                        appliances: sortedAppliances, 
-                        ustensils: sortedUstensils };
 
-    return dropdownFilters
+    data.allDropdownFilters.push(
+        {ingredients: sortedIngredients}, 
+        {appliances: sortedAppliances}, 
+        {ustensils: sortedUstensils});
 }
 
 export { 
@@ -76,5 +76,5 @@ export {
     allAppliances,
     allUstensils,
     initData, 
-    getActiveDropdownFiltersList
+    updateActiveDropdownFiltersList
 }

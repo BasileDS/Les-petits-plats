@@ -1,5 +1,3 @@
-import * as state from "/scripts/utils/state.js";
-
 // Display recipes cards
 function displayRecipesCards(recipes) {
     const recipesContainer = document.querySelector(".recipes-cards-wrapper");

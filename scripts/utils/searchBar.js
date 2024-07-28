@@ -2,6 +2,7 @@ import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
 import * as tag from "/scripts/templates/tag.js";
 import * as filters from "./filters.js";
+import * as state from "./state.js";
 import * as data from "./data.js";
 
 // Get search bar DOM elements
@@ -35,27 +36,28 @@ async function runSearch() {
     mainSearchInput.blur();
 
     if (mainSearchInput.value === "") {
-        console.log("Display all recipes");
         cardTemplate.displayRecipesCards(data.allRecipes);
 
-        const allDropdownFilters = data.getActiveDropdownFiltersList(allRecipes);
-        dropdownTemplate.displayDropdownElements(allDropdownFilters);
+        data.updateActiveDropdownFiltersList(data.allRecipes);
+        dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
 
     } else {
-        console.log("Run search");
+        console.log("Run search by input");
 
         tag.removeAllTags();
 
     /***  Start function to run to filter recipes and dropdown filters  ***/
 
-        const filteredRecipes = filters.getRecipesByInputValue();
-        cardTemplate.displayRecipesCards(filteredRecipes);
+        filters.getRecipesByInputValue();
+        cardTemplate.displayRecipesCards(state.activeRecipes);
 
-        const activeDropdownFilters = data.getActiveDropdownFiltersList(filteredRecipes);
-        dropdownTemplate.displayDropdownElements(activeDropdownFilters);
+        data.updateActiveDropdownFiltersList(state.activeRecipes);
+        dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
         
+        state.displayGlobalState();
+
 
     /**********************************************************************/
     }

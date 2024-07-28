@@ -6,11 +6,9 @@ function displayActiveTags() {
     const activeFiltersContainer = document.querySelector(".active-filters");
     activeFiltersContainer.innerHTML = "";
 
-    const filtersData = [filters.activeIngredients, filters.activeAppliances, filters.activeUstensils ]
+    state.activeDropdownFilters.forEach(dropdownFilter => {
 
-    filtersData.forEach(type => {
-
-        type.forEach(filter => {
+        dropdownFilter.forEach(filter => {
             const activeFilterTag = document.createElement("div");
             activeFilterTag.classList.add("active-filter-tag");
             
@@ -25,7 +23,7 @@ function displayActiveTags() {
             activeFiltersContainer.appendChild(activeFilterTag);
 
             tagRemoveButton.addEventListener("click", () => { // Tag close cross
-                filters.deleteFilter(type, filter);
+                filters.deleteFilter(dropdownFilter, filter);
                 displayActiveTags();
                 filters.updateDropdownActiveList();
             });

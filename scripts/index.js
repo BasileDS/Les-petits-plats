@@ -10,8 +10,8 @@ async function init() {
 
     cardTemplate.displayRecipesCards(data.allRecipes);
 
-    const dropdownFilters = data.getActiveDropdownFiltersList(data.allRecipes); 
-    dropdownTemplate.displayDropdownElements(dropdownFilters);
+    data.updateActiveDropdownFiltersList(data.allRecipes); 
+    dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
     searchBar.initSearchBar();
 }

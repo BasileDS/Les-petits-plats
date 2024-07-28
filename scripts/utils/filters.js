@@ -1,17 +1,20 @@
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
 import * as state from "/scripts/utils/state.js";
 import * as tag from "/scripts/templates/tag.js";
-import * as filters from "./filters.js";
 import * as data from "./data.js";
 import * as text from "./text.js";
 
-function filterByTag(ingredient) {
-    toggleFilter(filters.activeIngredients, ingredient);
+function filterByTag(dropdownFilter) {
     tag.displayActiveTags();
     updateDropdownActiveList();
+    
+    console.log(dropdownFilter);
+    toggleFilter(state.activeDropdownFilters, dropdownFilter);
 
-    const recipesByTag = getRecipesByActiveTags(state.activeRecipes);
-    cardTemplate.displayRecipesCards(recipesByTag);
+    getRecipesByActiveTags(state.activeRecipes);
+    cardTemplate.displayRecipesCards(state.activeRecipes);
+
+    // state.displayGlobalState();
 }
 
 // Set list element to active status
@@ -21,7 +24,7 @@ function updateDropdownActiveList() {
     activeDropdownFiltersDOM.forEach(filterDOM => {
         let isActive = false;
         const filterName = filterDOM.textContent;
-        activeIngredients.has(filterName) || activeAppliances.has(filterName) || activeUstensils.has(filterName)? isActive = true : isActive = false;
+        state.activeIngredients.has(filterName) || state.activeAppliances.has(filterName) || state.activeUstensils.has(filterName)? isActive = true : isActive = false;
 
         if (!isActive && filterDOM.lastChild.localName === "img") {
             disableFilterList(filterDOM);
@@ -48,26 +51,29 @@ function updateDropdownActiveList() {
 }
 
 // Activate a filter
-function addFilter(type, data) {
-    type.add(data);
-    console.log(type);
+function addFilter(filter, data) {
+    type.push(data);
+    console.log(filter);
 }
 
 // Toggle a filter
-function toggleFilter(type, data) {
-    const isActive = hasFilter(type, data);
-    !isActive ? type.add(data) : type.delete(data);
+function toggleFilter(filter, data) {
+
+    console.log(data, filter);
+
+    const isActive = hasFilter(data, filter);
+    !isActive ? filter.push(data) : filter.delete(data);
 }
 
 // Desactivate a filter
-function deleteFilter(type, data) {
-    type.delete(data);
-    console.log(type);
+function deleteFilter(filter, data) {
+    filter.delete(data);
+    console.log(filter);
 }
 
 // Check if a filter is actived or not
-function hasFilter(type, data) {
-    return type.has(data)
+function hasFilter(filter) {
+    return filter.includes(data)
 }
 
 // Returns an array of active recipes
@@ -184,10 +190,8 @@ function getRecipesByInputValue() {
 
 function getRecipesByActiveTags(recipes) {
     state.clearActiveRecipes();
-    
-    const filtersByType = [filters.activeIngredients, filters.activeAppliances , filters.activeUstensils ]
-    
-    filtersByType.forEach(activeFilters => {
+
+    state.activeDropdownFilters.forEach(activeFilters => {
         
         activeFilters.forEach(activeFilter => {
             

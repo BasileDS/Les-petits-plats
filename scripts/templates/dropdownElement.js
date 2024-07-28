@@ -50,7 +50,7 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     dropdownList.classList.add("dropdow-list");
 
     if (key === "ingredients") {
-        dropdownFilters.ingredients.forEach(ingredient => {
+        dropdownFilters[0].ingredients.forEach(ingredient => {
             const dropdownListElement = document.createElement("li");
 
             dropdownListElement.classList.add("dropdow-list-element", "list-element-ingredients");
@@ -63,6 +63,7 @@ function createDropdownElement(dropdownFilters, key, elementName) {
 
         /***  Start function to run to filter recipes and dropdown filters  ***/
 
+                console.log(ingredient);
                 filters.filterByTag(ingredient);
                 
 
@@ -72,7 +73,7 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     }
 
     if (key === "appliances") {
-        dropdownFilters.appliances.forEach(appliance => {
+        dropdownFilters[1].appliances.forEach(appliance => {
             const dropdownListElement = document.createElement("li");
 
             dropdownListElement.classList.add("dropdow-list-element", "list-element-appliances");
@@ -91,7 +92,7 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     }
 
     if (key === "ustensils") {
-        dropdownFilters.ustensils.forEach(ustensil => {
+        dropdownFilters[2].ustensils.forEach(ustensil => {
             const dropdownListElement = document.createElement("li");
 
             dropdownListElement.classList.add("dropdow-list-element", "list-element-ustensils");
