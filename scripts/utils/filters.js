@@ -1,84 +1,107 @@
+import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
-import * as state from "/scripts/utils/state.js";
 import * as tag from "/scripts/templates/tag.js";
+import * as searchBar from "./searchBar.js";
+import * as state from "./state.js";
 import * as data from "./data.js";
 import * as text from "./text.js";
 
-function filterByTag(dropdownFilter) {
-    tag.displayActiveTags();
-    updateDropdownActiveList();
+function filterByTags(dropdownFilter) {
+   
+    state.toogleActiveTag(dropdownFilter);
+    state.toogleActiveFilter(dropdownFilter);
     
-    console.log(dropdownFilter);
-    toggleFilter(state.activeDropdownFilters, dropdownFilter);
-
-    getRecipesByActiveTags(state.activeRecipes);
-    cardTemplate.displayRecipesCards(state.activeRecipes);
-
-    // state.displayGlobalState();
+    updateDropdownActiveList(dropdownFilter);
+    tag.displayActiveTags();
+    
+    const activeRecipes = state.activeRecipes.map((x) => x);
+    const recipesToDisplay = updateRecipesByActiveTags(activeRecipes);
+    cardTemplate.displayRecipesCards(recipesToDisplay);
+    
+    dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
+    dropdownTemplate.displayDropdownElements(state.activeDropdownFiltersList);
+    
+    const searchTag = document.querySelector(".active-search-tag");
+    if (state.activeDropdownFilters.size === 0 && searchTag === null) { // display all recipes if all tags are removed
+        searchBar.runSearch("");
+        state.activeDropdownFilters.clear();
+    }
+    
+    state.displayGlobalState();
 }
 
 // Set list element to active status
-function updateDropdownActiveList() {
+function updateDropdownActiveList(dropdownFilter) {
     const activeDropdownFiltersDOM = document.querySelectorAll(".dropdow-list-element");
-    
-    activeDropdownFiltersDOM.forEach(filterDOM => {
-        let isActive = false;
-        const filterName = filterDOM.textContent;
-        state.activeIngredients.has(filterName) || state.activeAppliances.has(filterName) || state.activeUstensils.has(filterName)? isActive = true : isActive = false;
 
-        if (!isActive && filterDOM.lastChild.localName === "img") {
-            disableFilterList(filterDOM);
-        }
-        if (isActive && filterDOM.lastChild.localName !== "img") {
-            activateFilterList(filterDOM);
-        } 
+    const activeDropdownIngredientsDOM = document.querySelectorAll(".list-element-ingredients");
+    const activeDropdownAppliancesDOM = document.querySelectorAll(".list-element-appliances");
+    const activeDropdownUstensilsDOM = document.querySelectorAll(".list-element-ustensils");
+    
+    let isIngredient = false;
+    let isAppliance = false;
+    let isUstensil = false;
+
+    activeDropdownIngredientsDOM.forEach(filterDOM => {
+        filterDOM.textContent === dropdownFilter ? isIngredient = true : "";
     });
 
-    function activateFilterList(filterDOM) {
-        const cancelCross = document.createElement("img");
-        cancelCross.setAttribute("src", "/assets/icons/cross.svg");
-        cancelCross.classList.add("cancel-list-element");
+    activeDropdownAppliancesDOM.forEach(filterDOM => {
+        filterDOM.textContent === dropdownFilter ? isAppliance = true : "";
+    });
+
+    activeDropdownUstensilsDOM.forEach(filterDOM => {
+        filterDOM.textContent === dropdownFilter ? isUstensil = true : "";
+    });
+
+    activeDropdownFiltersDOM.forEach(filterDOM => {
+        let isActive = false;
         
-        filterDOM.classList.add("active-list-element");        
-        filterDOM.appendChild(cancelCross);
-    }
+        if (filterDOM.textContent === dropdownFilter) {
+            
+            if (state.activeIngredients.has(dropdownFilter)) {
+                isActive = true
+            }
 
-    function disableFilterList(filterDOM) {
-        filterDOM.classList.remove("active-list-element");        
-        filterDOM.lastChild.remove();
-    }
+            if (state.activeAppliances.has(dropdownFilter)) {
+                isActive = true
+            }
 
-}
+            if (state.activeUstensils.has(dropdownFilter)) {
+                isActive = true
+            }
+    
+            if (!isActive && filterDOM.lastChild.localName !== "img") {
+                isIngredient ? state.activeIngredients.add(dropdownFilter) : "" ;
+                isAppliance ? state.activeAppliances.add(dropdownFilter) : "" ;
+                isUstensil ? state.activeUstensils.add(dropdownFilter) : "" ;
 
-// Activate a filter
-function addFilter(filter, data) {
-    type.push(data);
-    console.log(filter);
-}
+                state.activeDropdownFilters.add(dropdownFilter);
+            }
+            
+            if (isActive && filterDOM.lastChild.localName !== "img") {
+                isIngredient ? state.activeIngredients.add(dropdownFilter) : "" ;
+                isAppliance ? state.activeAppliances.add(dropdownFilter) : "" ;
+                isUstensil ? state.activeUstensils.add(dropdownFilter) : "" ;
+            }
 
-// Toggle a filter
-function toggleFilter(filter, data) {
-
-    console.log(data, filter);
-
-    const isActive = hasFilter(data, filter);
-    !isActive ? filter.push(data) : filter.delete(data);
-}
-
-// Desactivate a filter
-function deleteFilter(filter, data) {
-    filter.delete(data);
-    console.log(filter);
+            if (isActive && filterDOM.lastChild.localName === "img") {
+                isIngredient ? state.activeIngredients.delete(dropdownFilter) : "" ;
+                isAppliance ? state.activeAppliances.delete(dropdownFilter) : "" ;
+                isUstensil ? state.activeUstensils.delete(dropdownFilter) : "" ;
+            }
+        }
+    });
 }
 
 // Check if a filter is actived or not
-function hasFilter(filter) {
+function hasFilter(filter, data) {
     return filter.includes(data)
 }
 
 // Returns an array of active recipes
 function getRecipesByInputValue() {
-    state.clearActiveRecipes();
+    state.clearArray(state.activeRecipes);
 
     const matchingInputData = getMatchingDataFromInput();
     const matchingInputDataValues = matchingInputData.activeFilters;
@@ -128,8 +151,8 @@ function getRecipesByInputValue() {
         const inputValue = mainSearchInput.value;
 
         const ingredient = type === "ingredients" ? data.allIngredients : false;
-        const recipeName = type === "recipeNames" ? data.allAppliances : false;
-        const description = type === "descriptions" ? data.allUstensils : false;
+        const recipeName = type === "recipeNames" ? data.allNames : false;
+        const description = type === "descriptions" ? data.allDescriptions : false;
 
         const elements = !ingredient ? !recipeName ? !description ? console.log("error") : description : recipeName : ingredient ;
 
@@ -188,39 +211,53 @@ function getRecipesByInputValue() {
     }
 }
 
-function getRecipesByActiveTags(recipes) {
-    state.clearActiveRecipes();
+function updateRecipesByActiveTags(recipes) {
+    state.clearArray(state.activeRecipes);
 
-    state.activeDropdownFilters.forEach(activeFilters => {
-        
-        activeFilters.forEach(activeFilter => {
+    let matchingValues = [];
+    let filteredValues = [];
+
+    state.activeDropdownFilters.forEach(activeFilter => {
+
+        recipes.forEach(recipe => {
+
+            // Ingredients
+            recipe.ingredients.forEach(ingredient => {
+                if (activeFilter === ingredient.ingredient) { 
+                    matchingValues.push(recipe);
+                    state.activeRecipes.includes(recipe) ? "" : state.activeRecipes.push(recipe) ;
+                }
+            });
             
-            recipes.forEach(recipe => {
-
-                // Appliances
-                if (activeFilter === recipe.appliances) {
-                    console.log(activeFilter, recipe.appliances);
-                    state.activeRecipes.push(recipe);
-                }  
-                // Ustensils
-                recipe.ustensils.forEach(ustensil => {
-                    if (activeFilter === ustensil) {
-                        console.log(activeFilter, ustensil);
-                        state.activeRecipes.push(recipe);
-                    }
-                });
-                // Ingredients
-                recipe.ingredients.forEach(ingredient => {
-                    if (activeFilter === ingredient.ingredient) {
-                        console.log(activeFilter, ingredient.ingredient);
-                        state.activeRecipes.push(recipe);
-                    }
-                });
+            // Appliances
+            if (activeFilter === recipe.appliance) {
+                matchingValues.push(recipe);
+                state.activeRecipes.includes(recipe) ? "" : state.activeRecipes.push(recipe) ;             
+            }
+    
+            // Ustensils
+            recipe.ustensils.forEach(ustensil => {
+                if (activeFilter === text.capitalize(ustensil)) {
+                    matchingValues.push(recipe);
+                    state.activeRecipes.includes(recipe) ? "" : state.activeRecipes.push(recipe) ;
+                }
             });
         });
     });
 
-    return state. activeRecipes
+    // Return only tag filtered values matching all tags (ordered by tag click)
+    if (state.activeDropdownFilters.size > 1) {
+        matchingValues.forEach(recipe => {
+            const count = countInArray(matchingValues, recipe);
+            if (count > state.activeDropdownFilters.size - 1 && !filteredValues.includes(recipe)) {
+                filteredValues.push(recipe);
+            }
+        })
+
+        return filteredValues
+    }
+
+    return state.activeRecipes
 }
 
 // Returns the recipe if test is passed
@@ -282,13 +319,24 @@ function getMatchingRecipe(key, value, recipe) {
     return matchingRecipe
 }
 
-export { 
-    addFilter, 
-    toggleFilter, 
-    deleteFilter, 
+// Check how many time the element occures in the array
+function countInArray(array, element) {
+    return array.filter(item => item === element).length;
+}
+
+// Remove filter array element
+function removeArrayElement(arr, element) {
+    const index = arr.indexOf(element);
+
+    if (index > -1) { // only splice array when item is found
+        arr.splice(index, 1); 
+    }
+}
+
+export {
     hasFilter, 
-    filterByTag, 
+    filterByTags, 
     updateDropdownActiveList, 
     getRecipesByInputValue, 
-    getRecipesByActiveTags 
+    updateRecipesByActiveTags 
 }

@@ -19,47 +19,66 @@ function initSearchBar() {
     mainSearchInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             hideCompletionZone();
-            
             runSearch();
         }
     });
 
     searchButton.addEventListener("click", () => {
         hideCompletionZone();
-        
         runSearch();
     });
 }
 
 // Run matching data research
-async function runSearch() {
+async function runSearch(searchValue) {
     mainSearchInput.blur();
 
-    if (mainSearchInput.value === "") {
+    if (searchValue !== undefined && searchValue.length > 0) {
+        console.log("hello", searchValue.length);
+
+        filters.getRecipesByInputValue(searchValue);
+
         cardTemplate.displayRecipesCards(data.allRecipes);
 
-        data.updateActiveDropdownFiltersList(data.allRecipes);
+        dropdownTemplate.updateActiveDropdownFiltersList(data.allRecipes);
         dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
 
-    } else {
-        console.log("Run search by input");
+        // state.displayGlobalState();
+    }
+
+    if (mainSearchInput.value === "" || searchValue === "") {
+        filters.getRecipesByInputValue();
+
+        cardTemplate.displayRecipesCards(data.allRecipes);
+
+        dropdownTemplate.updateActiveDropdownFiltersList(data.allRecipes);
+        dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
 
-    /***  Start function to run to filter recipes and dropdown filters  ***/
+        // state.displayGlobalState();
+    }
 
+    if (mainSearchInput.value !== "") {
+        let inputValue;
+        searchValue !== undefined ? inputValue = searchValue : inputValue = mainSearchInput.value;
+        
+        tag.removeAllTags();
+        tag.displayActiveSearchTag(inputValue);
         filters.getRecipesByInputValue();
         cardTemplate.displayRecipesCards(state.activeRecipes);
+        dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
+        dropdownTemplate.displayDropdownElements(state.activeDropdownFiltersList);
 
-        data.updateActiveDropdownFiltersList(state.activeRecipes);
-        dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
-        
-        state.displayGlobalState();
+        // state.displayGlobalState();
 
+        mainSearchInput.value = "";
+        cancelButton.style.display = "none";
+        mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
 
-    /**********************************************************************/
+        return
     }
 
     mainSearchInput.value = "";
@@ -138,7 +157,7 @@ function displayCompletionMatchingElements(key, filterTextValue) {
         pFilterText.classList.add("search-completion-element-text");
 
         if (key === "description") {
-            const startIndex = filterTextValue.indexOf(inputValue);
+            const startIndex = filterTextValue.indexOf(mainSearchInput.value);
             const endIndex = startIndex + mainSearchInput.value.length;
             pFilterText.innerHTML = `${filterTextValue.slice(0, startIndex)}<span class="is-active-in-description">${filterTextValue.slice(startIndex, endIndex)}</span>${filterTextValue.slice(endIndex)}`;
         } else if (key === "errorMessage") {
@@ -177,4 +196,4 @@ function displayResultsNumber(resultsNumber) {
     mainSearchCompletionZone.insertBefore(pResultsNumber, CompletionFirstFilterNode);
 }
 
-export { initSearchBar }
+export { initSearchBar, runSearch }

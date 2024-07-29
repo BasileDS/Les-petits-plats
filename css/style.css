@@ -385,8 +385,7 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     cursor: pointer;
 }
 
-.active-filter-tag {
-    background-color: #FFD15B;
+.active-filter-tag, .active-search-tag {
     display: flex;
     align-items: center;
     width: fit-content;
@@ -394,7 +393,15 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     border-radius: 10px;
 }
 
-.active-filter-tag p {
+.active-filter-tag {
+    background-color: #FFD15B;
+}
+
+.active-search-tag {
+    border: 2px solid #FFD15B;
+}
+
+.active-filter-tag p, .active-search-tag p {
     font-size: 13px;
     margin: 5px 40px 5px 0px;
 }

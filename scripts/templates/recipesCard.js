@@ -3,6 +3,9 @@ function displayRecipesCards(recipes) {
     const recipesContainer = document.querySelector(".recipes-cards-wrapper");
     recipesContainer.innerHTML = "";
 
+    const recipesNumberDOM = document.querySelector(".recipes-number");
+    recipesNumberDOM.textContent = `${recipes.length} recettes`;
+
     recipes.forEach(recipe => {
         const article = document.createElement("article");
         article.classList.add("recipe-card");
