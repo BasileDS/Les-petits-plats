@@ -89,8 +89,8 @@ async function runSearch(searchValue) {
 // Display palceholder and close button based on user actions
 function initSearchBarElements() {
     mainSearchInput.addEventListener("input", () => {
-            hideCompletionZone();
-            // updateCompletionZone();
+            // hideCompletionZone();
+            updateCompletionZone();
     });
 
     mainSearchInput.addEventListener("focus", () => {
@@ -98,8 +98,8 @@ function initSearchBarElements() {
     });
 
     mainSearchInput.addEventListener("focusin", () => {
-            hideCompletionZone();
-            // updateCompletionZone();
+            // hideCompletionZone();
+            updateCompletionZone();
 
         window.addEventListener("click", () => {
             cancelButton.style.display = "block";
@@ -132,11 +132,9 @@ function updateCompletionZone() {
     mainSearchCompletionZone.innerHTML = "";
 
     if (mainSearchInput.value.length >= 3) {
-        displayCompletionMatchingElements("key", mainSearchInput.value)
-        displayResultsNumber(mainSearchInput.value.length)
+        hideCompletionZone();
     } else if (mainSearchInput.value.length < 3 && mainSearchInput.value.length !== 0) {
         displayCompletionMatchingElements("errorMessage");
-        
     } else {
         hideCompletionZone();
     }
@@ -149,8 +147,8 @@ function hideCompletionZone() {
 }
 
 // Display results in completion zone
-function displayCompletionMatchingElements(key, filterTextValue) {
-    mainSearchCompletionZone.style.display = "grid";
+function displayCompletionMatchingElements(key) {
+        mainSearchCompletionZone.style.display = "grid";
 
         const divFilter = document.createElement("div");
         divFilter.classList.add("search-completion-element");
@@ -158,24 +156,18 @@ function displayCompletionMatchingElements(key, filterTextValue) {
         const pFilterText = document.createElement("p");
         pFilterText.classList.add("search-completion-element-text");
 
-        if (key === "description") {
-            const startIndex = filterTextValue.indexOf(mainSearchInput.value);
-            const endIndex = startIndex + mainSearchInput.value.length;
-            pFilterText.innerHTML = `${filterTextValue.slice(0, startIndex)}<span class="is-active-in-description">${filterTextValue.slice(startIndex, endIndex)}</span>${filterTextValue.slice(endIndex)}`;
-        } else if (key === "errorMessage") {
-            displayResultsNumber(-1);
-
-            return
-        } else {
-            pFilterText.textContent = filterTextValue;
-        }
-
         const pKey = document.createElement("p");
         pKey.classList.add("search-completion-element-type");
         pKey.textContent = key;
         
-        divFilter.append(pKey, pFilterText);
+        // divFilter.append(pKey, pFilterText);
         mainSearchCompletionZone.appendChild(divFilter);
+
+        if (key === "errorMessage") {
+            displayResultsNumber(-1);
+
+            return
+        }
 }
 
 // Display the amout of results in completion zone
