@@ -66,7 +66,7 @@ async function runSearch(searchValue) {
         searchValue !== undefined ? inputValue = searchValue : inputValue = mainSearchInput.value;
         
         tag.removeAllTags();
-        tag.displayActiveSearchTag(inputValue);
+        // tag.displayActiveSearchTag(inputValue);
         filters.getRecipesByInputValue();
         cardTemplate.displayRecipesCards(state.activeRecipes);
         dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
@@ -74,9 +74,9 @@ async function runSearch(searchValue) {
 
         // state.displayGlobalState();
 
-        mainSearchInput.value = "";
-        cancelButton.style.display = "none";
-        mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+        // mainSearchInput.value = "";
+        // cancelButton.style.display = "none";
+        // mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
 
         return
     }
@@ -89,7 +89,8 @@ async function runSearch(searchValue) {
 // Display palceholder and close button based on user actions
 function initSearchBarElements() {
     mainSearchInput.addEventListener("input", () => {
-        updateCompletionZone();
+            hideCompletionZone();
+            // updateCompletionZone();
     });
 
     mainSearchInput.addEventListener("focus", () => {
@@ -97,7 +98,8 @@ function initSearchBarElements() {
     });
 
     mainSearchInput.addEventListener("focusin", () => {
-        updateCompletionZone();
+            hideCompletionZone();
+            // updateCompletionZone();
 
         window.addEventListener("click", () => {
             cancelButton.style.display = "block";
