@@ -1,5 +1,4 @@
 import * as dropdownTemplate from "./dropdownElement.js";
-import * as searchBar from "/scripts/utils/searchBar.js";
 import * as cardTemplate from "./recipesCard.js";
 import * as filters from "/scripts/utils/filters.js";
 import * as state from "/scripts/utils/state.js";
@@ -74,6 +73,7 @@ function removeAllTags() {
     activeFiltersContainer.innerHTML = "";
 
     state.activeTags.clear();
+    state.activeDropdownFilters.clear();
 
     cardTemplate.displayRecipesCards(data.allRecipes);
     dropdownTemplate.displayDropdownElements(data.allDropdownFilters);

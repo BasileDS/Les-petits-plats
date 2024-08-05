@@ -4,6 +4,7 @@ import * as tag from "/scripts/templates/tag.js";
 import * as filters from "./filters.js";
 import * as state from "./state.js";
 import * as data from "./data.js";
+import * as text from "./text.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
@@ -32,12 +33,9 @@ function initSearchBar() {
 // Run matching data research
 async function runSearch(searchValue) {
     mainSearchInput.blur();
-
     const inputValue = sanitizeHtmlInput(mainSearchInput.value);
-
+    
     if (searchValue !== undefined && searchValue.length > 0) {
-        console.log("hello", searchValue.length);
-
         filters.getRecipesByInputValue(searchValue);
 
         cardTemplate.displayRecipesCards(data.allRecipes);
@@ -46,8 +44,6 @@ async function runSearch(searchValue) {
         dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
-
-        // state.displayGlobalState();
     }
 
     if (inputValue === "" || searchValue === "") {
@@ -59,28 +55,34 @@ async function runSearch(searchValue) {
         dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
-
-        // state.displayGlobalState();
     }
 
     if (inputValue !== "") {
-        let inputText;
-        searchValue !== undefined ? inputText = searchValue : inputText = inputValue;
-        
         tag.removeAllTags();
-        // tag.displayActiveSearchTag(inputText);
+        state.activeTags.clear();
+        state.activeDropdownFilters.clear();
+
         filters.getRecipesByInputValue();
+
+        data.allDropdownFilters[0].ingredients.forEach(ingredient => {
+            const inputCapitalized = text.capitalize(inputValue);
+
+            if (inputCapitalized === ingredient) {
+                displaySearchTag(inputCapitalized);
+            }
+        });
+
         cardTemplate.displayRecipesCards(state.activeRecipes);
         dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
         dropdownTemplate.displayDropdownElements(state.activeDropdownFiltersList);
 
-        // state.displayGlobalState();
-
-        // mainSearchInput.value = "";
-        // cancelButton.style.display = "none";
-        // mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
-
         return
+
+        function displaySearchTag(searchInput) {
+            state.toogleActiveTag(searchInput);
+            state.toogleActiveFilter(searchInput);
+            tag.displayActiveTags();
+        }
     }
 
     mainSearchInput.value = "";
@@ -137,11 +139,9 @@ function sanitizeHtmlInput(input) {
     // Pattern to match event handler attributes like onclick, onload, etc.
     const ATTRS_REGEX = /\s*(on\w+|style)\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi;
 
-    // Remove matching tags
     let sanitizedText = input.replace(TAGS_REGEX, '');
-
-    // Remove matching attributes
     sanitizedText = sanitizedText.replace(ATTRS_REGEX, '');
+    sanitizedText = sanitizedText.trim();
 
     return sanitizedText;
 }
