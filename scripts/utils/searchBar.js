@@ -4,6 +4,7 @@ import * as tag from "/scripts/templates/tag.js";
 import * as filters from "./filters.js";
 import * as state from "./state.js";
 import * as data from "./data.js";
+import * as text from "./text.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
@@ -32,10 +33,9 @@ function initSearchBar() {
 // Run matching data research
 async function runSearch(searchValue) {
     mainSearchInput.blur();
-
+    const inputValue = sanitizeHtmlInput(mainSearchInput.value);
+    
     if (searchValue !== undefined && searchValue.length > 0) {
-        console.log("hello", searchValue.length);
-
         filters.getRecipesByInputValue(searchValue);
 
         cardTemplate.displayRecipesCards(data.allRecipes);
@@ -44,11 +44,9 @@ async function runSearch(searchValue) {
         dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
-
-        // state.displayGlobalState();
     }
 
-    if (mainSearchInput.value === "" || searchValue === "") {
+    if (inputValue === "" || searchValue === "") {
         filters.getRecipesByInputValue();
 
         cardTemplate.displayRecipesCards(data.allRecipes);
@@ -57,28 +55,34 @@ async function runSearch(searchValue) {
         dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 
         tag.removeAllTags();
-
-        // state.displayGlobalState();
     }
 
-    if (mainSearchInput.value !== "") {
-        let inputValue;
-        searchValue !== undefined ? inputValue = searchValue : inputValue = mainSearchInput.value;
-        
+    if (inputValue !== "") {
         tag.removeAllTags();
-        // tag.displayActiveSearchTag(inputValue);
+        state.activeTags.clear();
+        state.activeDropdownFilters.clear();
+
         filters.getRecipesByInputValue();
+
+        data.allDropdownFilters[0].ingredients.forEach(ingredient => {
+            const inputCapitalized = text.capitalize(inputValue);
+
+            if (inputCapitalized === ingredient) {
+                displaySearchTag(inputCapitalized);
+            }
+        });
+
         cardTemplate.displayRecipesCards(state.activeRecipes);
         dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
         dropdownTemplate.displayDropdownElements(state.activeDropdownFiltersList);
 
-        // state.displayGlobalState();
-
-        // mainSearchInput.value = "";
-        // cancelButton.style.display = "none";
-        // mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
-
         return
+
+        function displaySearchTag(searchInput) {
+            state.toogleActiveTag(searchInput);
+            state.toogleActiveFilter(searchInput);
+            tag.displayActiveTags();
+        }
     }
 
     mainSearchInput.value = "";
@@ -89,7 +93,6 @@ async function runSearch(searchValue) {
 // Display palceholder and close button based on user actions
 function initSearchBarElements() {
     mainSearchInput.addEventListener("input", () => {
-            // hideCompletionZone();
             updateCompletionZone();
     });
 
@@ -98,7 +101,6 @@ function initSearchBarElements() {
     });
 
     mainSearchInput.addEventListener("focusin", () => {
-            // hideCompletionZone();
             updateCompletionZone();
 
         window.addEventListener("click", () => {
@@ -122,9 +124,26 @@ function initSearchBarElements() {
     });
 
     cancelButton.addEventListener("click", () => {
+        mainSearchInput.value = "";
         cancelButton.style.display = "none";
         mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
+        runSearch();
     });
+}
+
+// Sanitize HTML input
+function sanitizeHtmlInput(input) {
+    // Pattern to match script, iframe, object, embed, link, style, base, form, img, and a tags
+    const TAGS_REGEX = /<\/?(script|iframe|object|embed|link|style|base|form|img|a)\b[^>]*>/gi;
+
+    // Pattern to match event handler attributes like onclick, onload, etc.
+    const ATTRS_REGEX = /\s*(on\w+|style)\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi;
+
+    let sanitizedText = input.replace(TAGS_REGEX, '');
+    sanitizedText = sanitizedText.replace(ATTRS_REGEX, '');
+    sanitizedText = sanitizedText.trim();
+
+    return sanitizedText;
 }
 
 // Update mains dearch completion zone content
@@ -177,16 +196,10 @@ function displayResultsNumber(resultsNumber) {
     const pResultsNumber = document.createElement("p");
     pResultsNumber.classList.add("results-number");
 
-    if (resultsNumber === 1) {
-        pResultsNumber.textContent = `${resultsNumber} élément correspond à votre recherche`;
-    } else if (resultsNumber > 1) {
-        pResultsNumber.textContent = `${resultsNumber} éléments correspondent à votre recherche`;
-    } else if (resultsNumber === -1) {
+    if (resultsNumber === -1) {
         pResultsNumber.textContent = "Veuillez saisir au moins trois caractères";
-    } else {
-        pResultsNumber.textContent = "Aucun éléments correspondent à votre recherche";
     }
-    
+        
     mainSearchCompletionZone.insertBefore(pResultsNumber, CompletionFirstFilterNode);
 }
 

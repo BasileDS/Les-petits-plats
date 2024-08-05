@@ -15,6 +15,7 @@ function displayRecipesCards(recipes) {
         
         const image = document.createElement("img");
         image.setAttribute("src", `./assets/images/${recipe.image}`);
+        image.setAttribute("alt", `${recipe.image}  `);
         image.classList.add("recipe-image");
         
         const duration = document.createElement("p");
