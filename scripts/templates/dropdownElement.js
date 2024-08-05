@@ -1,4 +1,3 @@
-import * as searchBar from "/scripts/utils//searchBar.js";
 import * as filters from "/scripts/utils/filters.js";
 import * as state from "/scripts/utils/state.js";
 import * as text from "/scripts/utils/text.js";
@@ -28,8 +27,9 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     filterName.textContent = elementName;
 
     const arrowIcon = document.createElement("img");
-    arrowIcon.classList.add("filter-arrow");
     arrowIcon.setAttribute("src", "/assets/icons/down-arrow.svg");
+    arrowIcon.setAttribute("alt", "down-arrow icon");
+    arrowIcon.classList.add("filter-arrow");
 
     const filterDropDown = document.createElement("div");
     filterDropDown.classList.add("filter-dropdown");
@@ -42,12 +42,14 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     dropdownSearchInput.classList.add("dropdow-input", "search-input");
 
     const dropdownCancelButton = document.createElement("img");
-    dropdownCancelButton.classList.add("dropdown-button", "dropdown-cancel-button", "cancel-button");
     dropdownCancelButton.setAttribute("src", "/assets/icons/cross.svg");
+    dropdownCancelButton.setAttribute("alt", "cross icon");
+    dropdownCancelButton.classList.add("dropdown-button", "dropdown-cancel-button", "cancel-button");
 
     const dropdownSearchButton = document.createElement("img");
-    dropdownSearchButton.classList.add("dropdown-button", "dropdown-search-button");
     dropdownSearchButton.setAttribute("src", "/assets/icons/search.svg");
+    dropdownSearchButton.setAttribute("alt", "search icon");
+    dropdownSearchButton.classList.add("dropdown-button", "dropdown-search-button");
     
     const dropdownList = document.createElement("ul");
     dropdownList.classList.add("dropdow-list");
