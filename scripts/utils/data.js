@@ -13,23 +13,26 @@ const allDescriptions = [];
 // Init constants to be used as modules
 async function initData() {
 
-    allRecipes.forEach(recipe => {
+    for (let i = 0; i < allRecipes.length; i++) {
+        const recipe = allRecipes[i];
         state.activeRecipes.push(recipe);
 
-        recipe.ingredients.forEach(ingredient => {
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            const ingredient = recipe.ingredients[i];
             allIngredients.push(ingredient.ingredient); // All ingredients
-        })
+        };
 
-        recipe.ustensils.forEach(ustensil => {
+        for (let i = 0; i < recipe.ustensils.length; i++) {
+            const ustensil = recipe.ustensils[i];
             allUstensils.push(ustensil); // All  ustensils
-        });
+        };
         
         allAppliances.push(recipe.appliance); // All appliances
 
         allNames.push(recipe.name); // All names
         
         allDescriptions.push(recipe.description); // All description
-    });
+    };
 }
 
 export { 

@@ -42,19 +42,23 @@ function updateDropdownActiveList(dropdownFilter) {
     let isAppliance = false;
     let isUstensil = false;
 
-    activeDropdownIngredientsDOM.forEach(filterDOM => {
+    for (let i = 0; i < activeDropdownIngredientsDOM.length; i++) {
+        const filterDOM = activeDropdownIngredientsDOM[i];
         filterDOM.textContent === dropdownFilter ? isIngredient = true : "";
-    });
+    };
 
-    activeDropdownAppliancesDOM.forEach(filterDOM => {
+    for (let i = 0; i < activeDropdownAppliancesDOM.length; i++) {
+        const filterDOM = activeDropdownAppliancesDOM[i];
         filterDOM.textContent === dropdownFilter ? isAppliance = true : "";
-    });
+    };
 
-    activeDropdownUstensilsDOM.forEach(filterDOM => {
+    for (let i = 0; i < activeDropdownUstensilsDOM.length; i++) {
+        const filterDOM = activeDropdownUstensilsDOM[i];
         filterDOM.textContent === dropdownFilter ? isUstensil = true : "";
-    });
+    };
 
-    activeDropdownFiltersDOM.forEach(filterDOM => {
+    for (let i = 0; i < activeDropdownFiltersDOM.length; i++) {
+        const filterDOM = activeDropdownFiltersDOM[i];
         let isActive = false;
         
         if (filterDOM.textContent === dropdownFilter) {
@@ -91,7 +95,7 @@ function updateDropdownActiveList(dropdownFilter) {
                 isUstensil ? state.activeUstensils.delete(dropdownFilter) : "" ;
             }
         }
-    });
+    };
 }
 
 // Check if a filter is actived or not
@@ -106,19 +110,24 @@ function getRecipesByInputValue() {
     const matchingInputData = getMatchingDataFromInput();
     const matchingInputDataValues = matchingInputData.activeFilters;
 
-    matchingInputDataValues.forEach(matchingInputArray => {
-        matchingInputArray.forEach(matchingInputValue => {
+    for (let i = 0; i < matchingInputDataValues.length; i++) {
+        const matchingInputArray = matchingInputDataValues[i];
+
+        for (let i = 0; i < matchingInputArray.length; i++) {
+            const matchingInputValue = matchingInputArray[i];
             const key = Object.keys(matchingInputValue);
-            data.allRecipes.forEach(recipe => {
+
+            for (let i = 0; i < data.allRecipes.length; i++) {
+                const recipe = data.allRecipes[i];
                 const matchingRecipe = getMatchingRecipe(key[0], matchingInputValue, recipe)
                 const isInclude = state.activeRecipes.includes(matchingRecipe);
                 
                 if(matchingRecipe !== undefined && !isInclude) {
                     state.activeRecipes.push(matchingRecipe);
                 }
-            });
-        });
-    });
+            };
+        };
+    };
 
     return state.activeRecipes
 
@@ -156,7 +165,8 @@ function getRecipesByInputValue() {
 
         const elements = !ingredient ? !recipeName ? !description ? console.log("error") : description : recipeName : ingredient ;
 
-        elements.forEach(element => {
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
             let key;
             let filterTextValueToCheck;
             let filterTextValueToDisplay;
@@ -205,7 +215,7 @@ function getRecipesByInputValue() {
                     activeFilterValues.push({ description: filterTextValueToCheck});
                 }
             }
-        });
+        };
 
         return { valuesToDisplay, activeFilterValues }
     }
@@ -217,17 +227,21 @@ function updateRecipesByActiveTags(recipes) {
     let matchingValues = [];
     let filteredValues = [];
 
-    state.activeDropdownFilters.forEach(activeFilter => {
+    const activeDropdownFilters = Array.from(state.activeDropdownFilters);
+    for (let i = 0; i < activeDropdownFilters.length; i++) {
+        const activeFilter = activeDropdownFilters[i];
 
-        recipes.forEach(recipe => {
+        for (let i = 0; i < recipes.length; i++) {
+            const recipe = recipes[i];
 
             // Ingredients
-            recipe.ingredients.forEach(ingredient => {
+            for (let i = 0; i < recipe.ingredients.length; i++) {
+                const ingredient = recipe.ingredients[i];
                 if (activeFilter === ingredient.ingredient) { 
                     matchingValues.push(recipe);
                     state.activeRecipes.includes(recipe) ? "" : state.activeRecipes.push(recipe) ;
                 }
-            });
+            };
             
             // Appliances
             if (activeFilter === recipe.appliance) {
@@ -236,23 +250,26 @@ function updateRecipesByActiveTags(recipes) {
             }
     
             // Ustensils
-            recipe.ustensils.forEach(ustensil => {
+            for (let i = 0; i < recipe.ustensils.length; i++) {
+                const ustensil = recipe.ustensils[i];
                 if (activeFilter === text.capitalize(ustensil)) {
                     matchingValues.push(recipe);
                     state.activeRecipes.includes(recipe) ? "" : state.activeRecipes.push(recipe) ;
                 }
-            });
-        });
-    });
+            };
+        };
+    };
 
     // Return only tag filtered values matching all tags (ordered by tag click)
     if (state.activeDropdownFilters.size > 1) {
-        matchingValues.forEach(recipe => {
+
+        for (let i = 0; i < matchingValues.length; i++) {
+            const recipe = matchingValues[i];
             const count = countInArray(matchingValues, recipe);
             if (count > state.activeDropdownFilters.size - 1 && !filteredValues.includes(recipe)) {
                 filteredValues.push(recipe);
             }
-        })
+        };
 
         return filteredValues
     }
@@ -268,14 +285,15 @@ function getMatchingRecipe(key, value, recipe) {
     let matchingRecipe;
     
     if (key === "ingredient") {
-        recipe.ingredients.forEach(ingredient => {
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            const ingredient = recipe.ingredients[i];
             recipeToCheck = text.removeAccents(ingredient.ingredient.toLowerCase());
             filterToCheck = text.removeAccents(value.ingredient.toLowerCase());
 
             if (recipeToCheck.includes(filterToCheck)) {
                 matchingRecipe = recipe;
             }
-        })
+        };
     }
     
     if (key === "appliance") {
@@ -288,14 +306,15 @@ function getMatchingRecipe(key, value, recipe) {
     }
     
     if (key === "ustensil") {
-            recipe.ustensils.forEach(ustensil => {
+        for (let i = 0; i < recipe.ustensils.length; i++) {
+            const ustensil = recipe.ustensils[i];
                 recipeToCheck = text.removeAccents(ustensil.toLowerCase());
                 filterToCheck = text.removeAccents(value.ustensil.toLowerCase());
 
                 if (recipeToCheck === filterToCheck) {
                     matchingRecipe = recipe;
                 }
-            });
+            };
     }
     
     if (key === "name") {

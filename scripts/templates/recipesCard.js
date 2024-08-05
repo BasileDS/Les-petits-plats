@@ -6,7 +6,9 @@ function displayRecipesCards(recipes) {
     const recipesNumberDOM = document.querySelector(".recipes-number");
     recipesNumberDOM.textContent = `${recipes.length} recettes`;
 
-    recipes.forEach(recipe => {
+    for (let i = 0; i < recipes.length; i++) {
+        const recipe = recipes[i];
+
         const article = document.createElement("article");
         article.classList.add("recipe-card");
         
@@ -44,7 +46,9 @@ function displayRecipesCards(recipes) {
         const divIngredients = document.createElement("div");
         divIngredients.classList.add("card-ingredients");
 
-        recipe.ingredients.forEach(ingredient => {
+        for (let i = 0; i < recipe.ingredients.length; i++) {
+            const ingredient = recipe.ingredients[i];
+            
             const pIngredient = document.createElement("div");
             pIngredient.classList.add("card-ingredient");
             const pIngredientName = document.createElement("p");
@@ -63,14 +67,14 @@ function displayRecipesCards(recipes) {
 
             pIngredient.append(pIngredientName, pIngredientQuantity);
             divIngredients.appendChild(pIngredient);
-        });
+        };
 
         divImage.append(duration, image);
         divRecipeContent.append(h2, pRecipeCat, pDescription, pIngredientCat, divIngredients);
         article.append(divImage, divRecipeContent);
         
         recipesContainer.appendChild(article);
-    });
+    };
 }
 
 export { displayRecipesCards };

@@ -16,7 +16,10 @@ function displayActiveTags() {
         activeFiltersContainer.appendChild(searchTag);
     }
 
-    state.activeTags.forEach(tag => {
+    const activeTags = Array.from(state.activeTags);
+    for (let i = 0; i < activeTags.length; i++) {
+        const tag = activeTags[i];
+
         const activeFilterTag = document.createElement("div");
         activeFilterTag.classList.add("active-filter-tag");
         
@@ -39,7 +42,7 @@ function displayActiveTags() {
 
         /**************************************************************/
         });
-    });
+    };
 }
 
 //  Display active search tag to keep in mind what is the research keywords

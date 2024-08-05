@@ -64,13 +64,14 @@ async function runSearch(searchValue) {
 
         filters.getRecipesByInputValue();
 
-        data.allDropdownFilters[0].ingredients.forEach(ingredient => {
+        for (let i = 0; i < data.allDropdownFilters[0].ingredients.length; i++) {
+            const ingredient = data.allDropdownFilters[0].ingredients[i];
             const inputCapitalized = text.capitalize(inputValue);
 
             if (inputCapitalized === ingredient) {
                 displaySearchTag(inputCapitalized);
             }
-        });
+        };
 
         cardTemplate.displayRecipesCards(state.activeRecipes);
         dropdownTemplate.updateActiveDropdownFiltersList(state.activeRecipes);
