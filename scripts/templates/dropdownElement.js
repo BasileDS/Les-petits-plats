@@ -65,13 +65,15 @@ function createDropdownElement(dropdownFilters, key, elementName) {
             
             toggleDropdownFilter(dropdownListElement, ingredient);
     
+            // Filter based on active tags
             dropdownListElement.addEventListener("click", () => {
-        /***  Start function to run to filter recipes and dropdown filters  ***/
-
                 filters.filterByTags(ingredient);
-                
-        /**********************************************************************/
             });
+        });
+
+        // Display dropdown filters list based on dropdown search input filed value
+        dropdownSearchInput.addEventListener("input", () => {
+            filterDropdownElements(".list-element-ingredients");
         });
     }
 
@@ -84,13 +86,15 @@ function createDropdownElement(dropdownFilters, key, elementName) {
 
             dropdownList.append(dropdownListElement);
 
-        /***  ***/
             activateDropdownFilter(dropdownListElement, appliance);
             dropdownListElement.addEventListener("click", () => {
                 console.log("Run search by appliance tag");
                 filters.filterByTags(appliance);
-        /********/
             });
+        });
+
+        dropdownSearchInput.addEventListener("input", () => {
+            filterDropdownElements(".list-element-appliances");
         });
     }
 
@@ -103,13 +107,16 @@ function createDropdownElement(dropdownFilters, key, elementName) {
 
             dropdownList.append(dropdownListElement);
 
-        /***  ***/
             activateDropdownFilter(dropdownListElement, ustensil);
             dropdownListElement.addEventListener("click", () => {
                 console.log("Run search by ustensil tag");
                 filters.filterByTags(ustensil);
-        /********/
             });
+        });
+
+        // Display dropdown filters list based on dropdown search input filed value
+        dropdownSearchInput.addEventListener("input", () => {
+            filterDropdownElements(".list-element-ustensils");
         });
     }
     
@@ -126,8 +133,14 @@ function createDropdownElement(dropdownFilters, key, elementName) {
 
     // Dropdown search cancel button listener
     cancelButton.addEventListener("click", () => {
+        const elementsList = document.querySelectorAll(".dropdow-list-element");
+        elementsList.forEach(element => {
+            element.style.display = "flex";
+        })
+
         cancelButton.style.display = "none";
         dropdownSearchInput.value = "";
+
         if (cancelButton.parentElement.classList[0] === "dropdown-search" ) {
             cancelButton.previousElementSibling.style.width = "130px";
         }
@@ -169,6 +182,21 @@ function createDropdownElement(dropdownFilters, key, elementName) {
             filterButton.lastChild.classList.toggle("rotate180");
         }
     });
+
+    function filterDropdownElements(cssClass) {
+        const elementsList = document.querySelectorAll(cssClass);
+        const inputValue = text.sanitizeHtmlInput(dropdownSearchInput.value.toLocaleLowerCase());
+
+        elementsList.forEach(element => {
+            const elementToCompare = element.textContent.toLocaleLowerCase();
+            
+            if (!elementToCompare.includes(inputValue)) {
+                element.style.display = "none";    
+            } else {
+                element.style.display = "flex";    
+            }
+        })
+    }
 }
 
 // Get on page dropdown filters list in an object { ingredients, appliances, ustensils }

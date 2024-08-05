@@ -481,4 +481,19 @@ const hasAccents = function(string) {
 	return !!string.match(firstAccent);
 };
 
-export { removeAccents, hasAccents, capitalize }
+// Sanitize HTML input
+function sanitizeHtmlInput(input) {
+    // Pattern to match script, iframe, object, embed, link, style, base, form, img, and a tags
+    const TAGS_REGEX = /<\/?(script|iframe|object|embed|link|style|base|form|img|a)\b[^>]*>/gi;
+
+    // Pattern to match event handler attributes like onclick, onload, etc.
+    const ATTRS_REGEX = /\s*(on\w+|style)\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi;
+
+    let sanitizedText = input.replace(TAGS_REGEX, '');
+    sanitizedText = sanitizedText.replace(ATTRS_REGEX, '');
+    sanitizedText = sanitizedText.trim();
+
+    return sanitizedText;
+}
+
+export { removeAccents, hasAccents, capitalize, sanitizeHtmlInput }

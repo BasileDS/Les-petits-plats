@@ -33,7 +33,7 @@ function initSearchBar() {
 // Run matching data research
 async function runSearch(searchValue) {
     mainSearchInput.blur();
-    const inputValue = sanitizeHtmlInput(mainSearchInput.value);
+    const inputValue = text.sanitizeHtmlInput(mainSearchInput.value);
     
     if (searchValue !== undefined && searchValue.length > 0) {
         filters.getRecipesByInputValue(searchValue);
@@ -129,21 +129,6 @@ function initSearchBarElements() {
         mainSearchInput.placeholder = "Rechercher une recette, un ingrédient, ...";
         runSearch();
     });
-}
-
-// Sanitize HTML input
-function sanitizeHtmlInput(input) {
-    // Pattern to match script, iframe, object, embed, link, style, base, form, img, and a tags
-    const TAGS_REGEX = /<\/?(script|iframe|object|embed|link|style|base|form|img|a)\b[^>]*>/gi;
-
-    // Pattern to match event handler attributes like onclick, onload, etc.
-    const ATTRS_REGEX = /\s*(on\w+|style)\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi;
-
-    let sanitizedText = input.replace(TAGS_REGEX, '');
-    sanitizedText = sanitizedText.replace(ATTRS_REGEX, '');
-    sanitizedText = sanitizedText.trim();
-
-    return sanitizedText;
 }
 
 // Update mains dearch completion zone content
