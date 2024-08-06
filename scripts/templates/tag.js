@@ -34,35 +34,10 @@ function displayActiveTags() {
 
         tagRemoveButton.addEventListener("click", () => {
             filters.filterByTags(tag);
-
-            // state.displayGlobalState();
+            state.displayGlobalState();
+        });
 
         /**************************************************************/
-        });
-    });
-}
-
-//  Display active search tag to keep in mind what is the research keywords
-function displayActiveSearchTag(value) {
-    const activeFiltersContainer = document.querySelector(".active-filters");
-    activeFiltersContainer.innerHTML = "";
-
-    const activeFilterTag = document.createElement("div");
-    activeFilterTag.classList.add("active-search-tag");
-    
-    const tagText = document.createElement("p");
-    tagText.textContent = value;
-    
-    const tagRemoveButton = document.createElement("img");
-    tagRemoveButton.classList.add("remove-tag-button");
-    tagRemoveButton.setAttribute("src", "/assets/icons/cross.svg");
-
-    activeFilterTag.append(tagText, tagRemoveButton);
-    activeFiltersContainer.appendChild(activeFilterTag);
-    
-    // Tag close cross listeners
-    tagRemoveButton.addEventListener("click", () => { 
-        removeAllTags();
     });
 }
 
@@ -79,4 +54,4 @@ function removeAllTags() {
     dropdownTemplate.displayDropdownElements(data.allDropdownFilters);
 }
 
-export { displayActiveTags, removeAllTags, displayActiveSearchTag }
+export { displayActiveTags, removeAllTags }

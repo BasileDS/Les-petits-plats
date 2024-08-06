@@ -15,6 +15,7 @@ const activeDropdownFilters = new Set();
 function toogleActiveTag(tag) {
     const isActive = activeTags.has(tag);
     isActive ? activeTags.delete(tag) : activeTags.add(tag);
+    displayGlobalState();
 }
 
 // Toggle (display/delete) a specific tag

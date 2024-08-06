@@ -26,8 +26,6 @@ function filterByTags(dropdownFilter) {
         searchBar.runSearch("");
         state.activeDropdownFilters.clear();
     }
-    
-    state.displayGlobalState();
 }
 
 // Set list element to active status
@@ -322,15 +320,6 @@ function getMatchingRecipe(key, value, recipe) {
 // Check how many time the element occures in the array
 function countInArray(array, element) {
     return array.filter(item => item === element).length;
-}
-
-// Remove filter array element
-function removeArrayElement(arr, element) {
-    const index = arr.indexOf(element);
-
-    if (index > -1) { // only splice array when item is found
-        arr.splice(index, 1); 
-    }
 }
 
 export {
