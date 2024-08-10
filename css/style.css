@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6, .main-nav-title {
     height: 700px;
     display: grid;
     padding:  0 50px;
-    background-image: linear-gradient( to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0,  0, 0.8)), url("/assets/images/Recette15.jpg");
+    background-image: linear-gradient( to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0,  0, 0.8)), url("/Les-petits-plats/assets/images/Recette15.jpg");
 }
 .header-nav, .header-search {
     display: flex;

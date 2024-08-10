@@ -27,7 +27,7 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     filterName.textContent = elementName;
 
     const arrowIcon = document.createElement("img");
-    arrowIcon.setAttribute("src", "/assets/icons/down-arrow.svg");
+    arrowIcon.setAttribute("src", "/Les-petits-plats/assets/icons/down-arrow.svg");
     arrowIcon.setAttribute("alt", "down-arrow icon");
     arrowIcon.classList.add("filter-arrow");
 
@@ -42,12 +42,12 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     dropdownSearchInput.classList.add("dropdow-input", "search-input");
 
     const dropdownCancelButton = document.createElement("img");
-    dropdownCancelButton.setAttribute("src", "/assets/icons/cross.svg");
+    dropdownCancelButton.setAttribute("src", "/Les-petits-plats/assets/icons/cross.svg");
     dropdownCancelButton.setAttribute("alt", "cross icon");
     dropdownCancelButton.classList.add("dropdown-button", "dropdown-cancel-button", "cancel-button");
 
     const dropdownSearchButton = document.createElement("img");
-    dropdownSearchButton.setAttribute("src", "/assets/icons/search.svg");
+    dropdownSearchButton.setAttribute("src", "/Les-petits-plats/assets/icons/search.svg");
     dropdownSearchButton.setAttribute("alt", "search icon");
     dropdownSearchButton.classList.add("dropdown-button", "dropdown-search-button");
     
