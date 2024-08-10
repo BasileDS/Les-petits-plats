@@ -1,10 +1,10 @@
-import * as dropdownTemplate from "/Les-petits-plats/scripts/templates/dropdownElement.js";
+import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
 import * as tag from "/scripts/templates/tag.js";
-import * as searchBar from "./searchBar.js";
-import * as state from "./state.js";
-import * as data from "./data.js";
-import * as text from "./text.js";
+import * as searchBar from "/scripts/utils/searchBar.js";
+import * as state from "/scripts/utils/state.js";
+import * as data from "/scripts/utils/data.js";
+import * as text from "/scripts/utils/text.js";
 
 function filterByTags(dropdownFilter) {
    

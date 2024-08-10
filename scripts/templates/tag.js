@@ -1,5 +1,5 @@
-import * as dropdownTemplate from "./dropdownElement.js";
-import * as cardTemplate from "./recipesCard.js";
+import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
+import * as cardTemplate from "/scripts/templates/recipesCard.js";
 import * as filters from "/scripts/utils/filters.js";
 import * as state from "/scripts/utils/state.js";
 import * as data from "/scripts/utils/data.js";

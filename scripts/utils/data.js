@@ -1,4 +1,4 @@
-import * as state from "./state.js";
+import * as state from "/scripts/utils/state.js";
 
 const response = await fetch("./data/recipes.json");
 const allRecipes = await response.json(); // All recipes

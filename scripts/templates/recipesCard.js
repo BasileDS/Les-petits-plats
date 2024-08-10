@@ -14,7 +14,7 @@ function displayRecipesCards(recipes) {
         divImage.classList.add("recipe-header");
         
         const image = document.createElement("img");
-        image.setAttribute("src", `./assets/images/${recipe.image}`);
+        image.setAttribute("src", `/assets/images/${recipe.image}`);
         image.setAttribute("alt", `${recipe.image}  `);
         image.classList.add("recipe-image");
         

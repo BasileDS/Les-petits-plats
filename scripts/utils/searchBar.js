@@ -1,10 +1,10 @@
 import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
 import * as cardTemplate from "/scripts/templates/recipesCard.js";
 import * as tag from "/scripts/templates/tag.js";
-import * as filters from "./filters.js";
-import * as state from "./state.js";
-import * as data from "./data.js";
-import * as text from "./text.js";
+import * as filters from "/scripts/utils/filters.js";
+import * as state from "/scripts/utils/state.js";
+import * as data from "/scripts/utils/data.js";
+import * as text from "/scripts/utils/text.js";
 
 // Get search bar DOM elements
 const mainSearchInput = document.querySelector(".recipes-search-input");
