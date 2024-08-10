@@ -1,8 +1,8 @@
-import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
-import * as cardTemplate from "/scripts/templates/recipesCard.js";
-import * as filters from "/scripts/utils/filters.js";
-import * as state from "/scripts/utils/state.js";
-import * as data from "/scripts/utils/data.js";
+import * as dropdownTemplate from "/Les-petits-plats/scripts/templates/dropdownElement.js";
+import * as cardTemplate from "/Les-petits-plats/scripts/templates/recipesCard.js";
+import * as filters from "/Les-petits-plats/scripts/utils/filters.js";
+import * as state from "/Les-petits-plats/scripts/utils/state.js";
+import * as data from "/Les-petits-plats/scripts/utils/data.js";
 
 // Display active tags based on active tags set array
 function displayActiveTags() {

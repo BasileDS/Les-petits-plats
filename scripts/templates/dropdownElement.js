@@ -1,7 +1,7 @@
-import * as filters from "/scripts/utils/filters.js";
-import * as state from "/scripts/utils/state.js";
-import * as text from "/scripts/utils/text.js";
-import * as data from "/scripts/utils/data.js";
+import * as filters from "/Les-petits-plats/scripts/utils/filters.js";
+import * as state from "/Les-petits-plats/scripts/utils/state.js";
+import * as text from "/Les-petits-plats/scripts/utils/text.js";
+import * as data from "/Les-petits-plats/scripts/utils/data.js";
 
 const filtersContainer = document.querySelector(".filter-elements");
 
