@@ -6,6 +6,14 @@ import * as state from "/Les-petits-plats/scripts/utils/state.js";
 import * as data from "/Les-petits-plats/scripts/utils/data.js";
 import * as text from "/Les-petits-plats/scripts/utils/text.js";
 
+// import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
+// import * as cardTemplate from "/scripts/templates/recipesCard.js";
+// import * as tag from "/scripts/templates/tag.js";
+// import * as searchBar from "/scripts/utils/searchBar.js";
+// import * as state from "/scripts/utils/state.js";
+// import * as data from "/scripts/utils/data.js";
+// import * as text from "/scripts/utils/text.js";
+
 function filterByTags(dropdownFilter) {
    
     state.toogleActiveTag(dropdownFilter);

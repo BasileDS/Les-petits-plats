@@ -4,6 +4,12 @@ import * as filters from "/Les-petits-plats/scripts/utils/filters.js";
 import * as state from "/Les-petits-plats/scripts/utils/state.js";
 import * as data from "/Les-petits-plats/scripts/utils/data.js";
 
+// import * as dropdownTemplate from "/scripts/templates/dropdownElement.js";
+// import * as cardTemplate from "/scripts/templates/recipesCard.js";
+// import * as filters from "/scripts/utils/filters.js";
+// import * as state from "/scripts/utils/state.js";
+// import * as data from "/scripts/utils/data.js";
+
 // Display active tags based on active tags set array
 function displayActiveTags() {
     const activeFiltersContainer = document.querySelector(".active-filters");
@@ -25,7 +31,8 @@ function displayActiveTags() {
         
         const tagRemoveButton = document.createElement("img");
         tagRemoveButton.classList.add("remove-tag-button");
-        tagRemoveButton.setAttribute("src", "/assets/icons/cross.svg");
+        // tagRemoveButton.setAttribute("src", "/assets/icons/cross.svg");
+        tagRemoveButton.setAttribute("src", "/Les-petits-plats/assets/icons/cross.svg");
 
         activeFilterTag.append(tagText, tagRemoveButton);
         activeFiltersContainer.appendChild(activeFilterTag);
