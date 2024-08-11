@@ -54,7 +54,8 @@ function createDropdownElement(dropdownFilters, key, elementName) {
     dropdownCancelButton.classList.add("dropdown-button", "dropdown-cancel-button", "cancel-button");
 
     const dropdownSearchButton = document.createElement("img");
-    dropdownSearchButton.setAttribute("src", "/assets/icons/search.svg");
+    // dropdownSearchButton.setAttribute("src", "/assets/icons/search.svg");
+    dropdownSearchButton.setAttribute("src", "/Les-petits-plats/assets/icons/search.svg");
     dropdownSearchButton.setAttribute("alt", "search icon");
     dropdownSearchButton.classList.add("dropdown-button", "dropdown-search-button");
     
