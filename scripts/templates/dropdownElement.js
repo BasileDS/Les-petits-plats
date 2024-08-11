@@ -267,7 +267,8 @@ function toggleDropdownFilter(DOMelement, textValue) {
 function activateDropdownFilter(DOMelement, textValue) {
     if (state.activeTags.has(textValue)) {
         const cancelCross = document.createElement("img");
-        cancelCross.setAttribute("src", "/assets/icons/cross.svg");
+        // cancelCross.setAttribute("src", "/assets/icons/cross.svg");
+        cancelCross.setAttribute("src", "/Les-petits-plats/assets/icons/cross.svg");
         cancelCross.classList.add("cancel-list-element");
         
         DOMelement.classList.add("active-list-element");        
