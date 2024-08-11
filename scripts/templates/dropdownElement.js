@@ -249,7 +249,7 @@ function updateActiveDropdownFiltersList(recipes) {
             {ingredients: sortedIngredients}, 
             {appliances: sortedAppliances}, 
             {ustensils: sortedUstensils}
-        );
+        ); 
     }
 
     // Update active filters list after tag or input search
